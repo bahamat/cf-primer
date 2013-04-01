@@ -6,12 +6,13 @@ A primer for CFEngine, a mini zero-to-hero introduction to help get you producti
 This is a slide show using [DZSlides](http://paulrouget.com/dzslides/).
 
 You will need [pandoc](http://johnmacfarlane.net/pandoc/) version 1.11.1 or
-later to convert `slides.md` into `slides.html`. (Debian stable is
-unfortunately 1.5.1.1 and does not have DZSlides support).
+later (but possibly earlier) to convert `slides.md` into `slides.html`.
+(Debian stable is unfortunately 1.5.1.1 and does not have DZSlides support).
 
-Once you have `pandoc` installed simply run `make` to build `slides.html`.
+## Getting Started.
 
-Open `slides.html` in any modern web browser, preferably in full screen.
+1. Once you have `pandoc` installed simply run `make` to build `slides.html`.
+2. Open `slides.html` in any modern web browser, preferably in full screen.
 
 ## Installing pandoc
 

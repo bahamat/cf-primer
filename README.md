@@ -32,18 +32,18 @@ that `~/.cabal/bin/pandoc` is in your path.
 
 ### On Debian based distributions
 
-Debian wheezy and previous
+If `pandoc` 1.9.1.1 or later is available:
+
+    sudo apt-get install pandoc
+
+else:
 
     sudo apt-get install haskell-platform
     sudo cabal install pandoc
 
-Debian unstable
-
-    sudo apt-get install pandoc
-
 ### On RPM based distributions
 
-If `pandoc` 1.11.1 is available:
+If `pandoc` 1.9.1.1 or later is available:
 
     sudo yum install pandoc
 

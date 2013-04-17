@@ -4,9 +4,9 @@
 
 **CFEngine** is a powerful language for controlling all aspects of a system.  CFEngine runs primarily on UNIX and UNIX like operating systems, but can also run on Windows.
 
-CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine.
+CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine. In other words, you'll learn the 20% of CFEngine that will do 80% of the work.
 
-In other words, you'll learn the 20% of CFEngine that will do 80% of the work.  Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the reference manual.
+After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the reference manual.
 
 # Components of CFEngine
 
@@ -101,7 +101,7 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
           attribute1 => "value",
           attribute2 => "value";
 
-Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, but the available attributes varies depending on the *promise type*.
+Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, but the available attributes will vary depending on the *promise type*.
 
 The value can be either a text string (which must be quoted) or another object (which must not be quoted). All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
 
@@ -109,12 +109,12 @@ Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise
 
-An example promise.
-
     files:
       linux::
         "/tmp/hello/world" -> "Student"
           create => "true";
+
+This is an example promise.
 
 * This is a promise of **type** `files`.
 * This promise has a **class context** of `linux` (it will only apply if running a Linux kernel).

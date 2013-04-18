@@ -1,4 +1,22 @@
-# CFEngine: Zero to Hero
+% CF-Primer: Zero to Hero
+% Brian Bennett <bahamat@digitalelf.net>, @bahamat
+% 2013-04-13
+
+<!-- 
+Copyright 2013 Brian Bennett
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 
 # Welcome!
 
@@ -7,6 +25,14 @@
 CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine. In other words, you'll learn the 20% of CFEngine that will do 80% of the work.
 
 After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the reference manual.
+
+# Fork Me on Github!
+
+You can get a copy of this presentation any time on Github.
+
+<http://github.com/bahamat/cf-primer>
+
+
 
 # Components of CFEngine
 
@@ -153,8 +179,6 @@ For example, a bundle to configure Apache might:
 
     }
 
-# Bundles
-
 Bundles apply to the binary that executes them. E.g., `agent` bundles apply to `cf-agent` while `server` bundles apply to `cf-serverd`.
 
 Bundles of type `common` apply to any CFEngine binary.
@@ -176,13 +200,100 @@ A **body** is a collection of *attributes*. These are attributes that supplement
 
 The major difference between a *bundle* and a *body* is that a bundle contains *promises* while a *body* contains only *attributes*.
 
+Take a moment to let this sink in.
+
+* A **bundle** is a collection of *promises*.
+* A **body** is a collection of *attributes* that is applied to a promise.
+
+The distinction is subtle, especially at first and many people are tripped up by this.
+
 In a body each attribute ends with a *semi-colon*.
 
-# file copying
+# Bundles & Bodies
 
-# file editing
+Bundles and bodies can be created as reusable objects. In other words you can define one and then call it like a function, even passing in parameters which will implicitly become variables.
 
-# using classes to control flow and/or promise selection
+Here's an example:
+
+    body type name (param) {
+      attribute1 => "$param";
+    }
+
+The parameter `param` is accessed as a variable by `$param`. You can name your parameters anything you like.
+
+# The Community Open Promise Body Library
+
+TODO: `cfengine_stdlib.cf`
+
+# Putting it all together
+
+These are the building blocks. You now know what they all are.
+
+### Congratulations!
+
+You'll now be walked through some example bundles (and accompanying bodies) that will  each accomplish a single atomic task.
+
+|      Let's see it in practice.
+
+# Set File Permissions
+
+    bundle agent example {
+      files:
+        "/etc/shadow"     perms => root_shadow;
+        "/etc/gshadow"    perms => root_shadow;
+    }
+
+    body perms root_shadow {
+      owners => { "root" };
+      groups => { "shadow" };
+      mode   => "0640";
+    }
+
+* This is an **agent** bundle (meaning that it is processed by `cf-agent`).
+* Its purpose is to set the permissions on `/etc/shadow` and `/etc/gshadow`.
+* It uses an external body named `root_shadow`.
+* The body only needs to be defined once and can be reused for any number of promises.
+
+Note: The values for `owners` and `groups` is enclosed in curly braces. This is because these attributes take a list (`slist`).
+
+# Copy an Entire File
+
+    bundle agent example {
+      files:
+        "/etc/motd"     copy_from => cp("/repo/motd");
+    }
+
+    body copy_from cp (from) {
+      servers     => { "$(sys.policy_hub)" };
+      source      => "$(from)";
+      compare     => "digest";
+    }
+
+* The purpose of this bundle is to copy `/etc/motd` from the CFEngine server
+* `$(sys.policy_hub)` is an automatic variable which contains the CFEngine server's address.
+* The path `/repo/motd` is on the *server's* filesystem.
+* The `compare` type tells CFEngine how to know when the file needs updating.
+
+# Edit a File
+
+    bundle agent example {
+      files:
+        "/etc/ssh/sshd_config"     edit_line => deny_root_ssh;
+    }
+
+    bundle edit_line deny_root_ssh {
+      delete_lines:
+        "^PermitRootLogin.*"
+      insert_lines:
+        "PermitRootLogin no"
+    }
+
+* This will delete any line matching the regular expression `^PermitRootLogin.*`.
+* This also inserts the line `PermitRootLogin no` *at the end of the file*.
+* CFEngine is smart enough to know not to edit the file if the end result is already **converged**.
+* This is an overly simplistic example. When editing configuration files you probably want to copy the whole file or use `set_config_values()` from `cfengine_stdlib.cf`.
+
+# Use classes to control flow and/or promise selection
 
 # setting up/organizing a client server environment
 
@@ -192,7 +303,13 @@ In a body each attribute ends with a *semi-colon*.
 
 # deleting old log files
 
+# Check a Filesystem for Low Disk Space
+
 # Administratively:
 
 - keeping track of what repairs were done and which failed
 - debugging (using verbose mode)
+
+# Pro Tips
+
+TODO: list

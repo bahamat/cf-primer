@@ -3,11 +3,12 @@ cf-primer
 
 A primer for CFEngine, a mini zero-to-hero introduction to help get you productive.
 
-This is a slide show using [DZSlides](http://paulrouget.com/dzslides/).
+This is a slide show using [Slidy2](http://www.w3.org/Talks/Tools/Slidy2).
 
 You will need [pandoc](http://johnmacfarlane.net/pandoc/) version 1.9.1.1
 or later (but possibly earlier) to convert `slides.md` into `slides.html`.
-(Debian stable is unfortunately 1.5.1.1 and does not have DZSlides support).
+(Debian stable is unfortunately 1.5.1.1 and does not have support for some
+of the options I use).
 
 ## Getting Started.
 
@@ -43,11 +44,15 @@ else:
 
 ### On RPM based distributions
 
-If `pandoc` 1.9.1.1 or later is available:
+Use the [justhub](http://www.justhub.org/download) Haskell distribution then
+install `pandoc` via cabal.
 
-    sudo yum install pandoc
+    sudo cabal install pandoc
 
-else:
+### On any other Unix like system
 
-    sudo yum install haskell-platform
+Try the community supported
+[Haskell platform](http://www.haskell.org/platform/linux.html) packages.
+Then, you guessed it, install `pandoc` via cabal.
+
     sudo cabal install pandoc

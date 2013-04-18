@@ -2,7 +2,9 @@
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
 % 2013-04-13
 
-<!-- 
+# Welcome!
+
+<!--
 Copyright 2013 Brian Bennett
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +19,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-# Welcome!
 
 **CFEngine** is a powerful language for controlling all aspects of a system.  CFEngine runs primarily on UNIX and UNIX like operating systems, but can also run on Windows.
 

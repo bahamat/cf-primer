@@ -216,12 +216,12 @@ Bundles and bodies can be created as reusable objects. In other words you can de
 Here's an example:
 
     body type name (param) {
-      attribute1 => "$param";
+      attribute1 => "$(param)";
     }
 
-The parameter `param` is accessed as a variable by `$param`. You can name your parameters anything you like.
+The parameter `param` is accessed as a variable by `$(param)`. You can name your parameters anything you like.
 
-# The Community Open Promise Body Library
+# The CFEngine Standard Library
 
 TODO: `cfengine_stdlib.cf`
 
@@ -313,3 +313,4 @@ Note: The values for `owners` and `groups` is enclosed in curly braces. This is 
 # Pro Tips
 
 TODO: list
+

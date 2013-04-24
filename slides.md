@@ -223,7 +223,9 @@ The parameter `param` is accessed as a variable by `$(param)`. You can name your
 
 # The CFEngine Standard Library
 
-TODO: `cfengine_stdlib.cf`
+The **CFEngine Standard Library** comes bundled with CFEngine in the file `cfengine_stdlib.cf`.
+
+The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the standard library well, it will save you much time.
 
 # Putting it all together
 
@@ -293,17 +295,214 @@ Note: The values for `owners` and `groups` is enclosed in curly braces. This is 
 * CFEngine is smart enough to know not to edit the file if the end result is already **converged**.
 * This is an overly simplistic example. When editing configuration files you probably want to copy the whole file or use `set_config_values()` from `cfengine_stdlib.cf`.
 
-# Use classes to control flow and/or promise selection
+# Introduction to Classes
 
-# setting up/organizing a client server environment
+A **class** is like a tag (like tagging a photo). Classes are used to give a promise *context*. There are two types of classes.
 
-# keeping services running
+1. **Hard classes**. These are classes that CFEngine will create automatically. Hard classes are determined based on the system attributes. For example a server running Linux will have the class `linux`.
+2. **Soft classes**. These are classes that are defined by you. You can create them based on the outcome of a promise, based on the existence of other classes, or for no reason.
+
+Here is a list of hard classes defined on an actual system running CFEngine.
+
+    cf3>  -> Hard classes = { 127_0_0_2 2_cpus 32_bit April Day23 Evening GMT_Hr3
+    Hr20 Hr20_Q3 Lcycle_0 Min30_35 Min31 PK_MD5_1a66e41f5cca80e636636702476cf925 Q3
+    Tuesday Yr2013 any cfengine cfengine_3 cfengine_3_4 cfengine_3_4_3 common
+    community_edition compiled_on_linux_gnu debian debian_6 debian_6_0 have_aptitude
+    i686 ipv4_127 ipv4_127_0 ipv4_127_0_0 ipv4_127_0_0_2 linux linux_2_6_18_pony6_3
+    linux_i686 linux_i686_2_6_18_pony6_3
+    linux_i686_2_6_18_pony6_3__1_SMP_Tue_Mar_13_07_31_44_PDT_2012
+    mac_00_00_00_00_00_00 net_iface_eth0 verbose_mode } 
+
+# Use classes to control promise selection
+
+    bundle agent apache_config {
+      files:
+        
+        debian::
+          "/etc/apache2/apache2.conf"
+            copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)");
+        redhat::
+          "/etc/httpd/conf/httpd.conf"
+            copy_from => remote_cp("/cfengine/repo/redhat/httpd.conf","$(sys.policy_hub)");
+        solaris::
+          "/etc/apache2/2.2/httpd.conf"
+            copy_from => remote_cp("/cfengine/repo/solaris/httpd.conf","$(sys.policy_hub)");
+    
+    }
+
+This set of promises will copy the appropriate apache config file depending on the type of server. Notice that each file promise is prefixed by a *class*. The promise will be skipped unless that class is defined on the system.
+
+Thus, only Debian systems will run the `debian::` context promise, only Red Hat will run `redhat::` and only Solaris will run `solaris::`.
+
+# A note about classes and distributions based on other distributions
+
+I said that only Debian systems will run `debian::` and only Red Hat will run `redhat::`. This isn't exactly true.
+
+* Ubuntu is based on Debian, and so will have both `ubuntu` and `debian` defined as a hard classes.
+* Likewise, CentOS is based on Red Hat and so will have both `centos` and `redhat` defined as hard classes.
+
+This goes for any distro that is based on another distro. The "parent" classes will be also defined.
+
+# Use classes to control flow
+
+    bundle agent apache_config {
+      files:
+        
+        "/etc/apache2/apache2.conf"
+          copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)")
+            classes => if_repaired("RestartApache");
+
+      commands:
+      
+        RestartApache::
+          "/usr/sbin/apache2ctl graceful";
+    }
+
+This set of promises will first copy the Apache configuration file. Once the Apache configuration file is updated, Apache must be restarted. In order to make sure that Apache gets restarted when necessary a class will be defined when the configuration file is updated.
+
+When CFEngine reaches the commands section, if the `RestartApache` class is defined (which only happens if the config file is updated) then Apache will be restarted.
+
+# Use classes to control flow
+
+    bundle agent apache_config {
+      files:
+        
+        "/etc/apache2/apache2.conf"
+          copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)"),
+            classes => if_repaired("RestartApache");
+
+      commands:
+      
+        RestartApache::
+          "/usr/sbin/apache2ctl graceful";
+    }
+
+So, the workflow then is:
+
+1. Perform promise 1
+2. Define a class if repaired
+3. Perform promise 2 if the class has been set
+
+I use this ALL. THE. TIME. If this class is to teach you 20% that accomplishes 80%, *this slide* is the 5% that accomplishes 95%.
+
+# Compound class context
+
+    ...
+      commands:
+        RestartApache.debian::
+          "/usr/sbin/apache2ctl graceful";
+        RestartApache.redhat::
+          "/usr/sbin/apachectl graceful";
+    }
+
+This example is similar to the last one, except that Debian and Redhat each have different commands used to restart Apache. Therefore, we use a compound boolean class context. The expression `RestartApache.debian` means "RestartApache *and* debian".
+
+* Operators `.` and `&` are boolean *and*.
+* Operators `|` and `||` are boolean *or*.
+* Operator  `!` is boolean *not*.
+* Parenthesis `()` can be used to group boolean expressions.
+
+Examples:
+
+* `(redhat.Monday)|(debian.Tuesday)`
+* `debian.!ubuntu`
+
+# Keep services running; using processes
+
+    bundle agent apache {
+    
+    processes:
+    
+      "apache2"
+        restart_class => "StartApache";
+    
+    commands:
+      StartApache::
+        "/etc/init.d/apache2 start";
+      
+    }
+
+This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*apache2.*`. If it is not found then the class `StartApache` will get defined.
+
+When CFEngine executes `commands` promises Apache will be started.
+
+# Ensuring processes are not running; using processes and commands
+
+    bundle agent stop_cups {
+    
+      processes:
+   
+        "bluetoothd"
+          process_stop => "/etc/init.d/cups stop";
+    }
+
+This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. If it is found the `process_stop` command is executed.
+
+# Ensuring processes are not running; using processes and signals
+
+    bundle agent stop_cups {
+    
+      processes:
+   
+        "bluetoothd"
+          signals => { "term", "kill" };
+    }
+
+This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. Any matching process is sent the `term` signal, then sent the `kill` signal.
+
+**Note:** The promise `"bluetoothd"` becomes the *regular expression*, `.*bluetoothd.*` that is matched against the output of `ps`. This means that it can match *anywhere* on the line, not just the process name field. *Caveat emptor!*
+
+# Keep services running; using services
+
+    bundle agent apache {
+      services:
+    
+        "www"
+          service_policy => "start";
+    }
+
+This uses the `services` promise type to ensure that Apache is always running. This only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
+
+`services` promises currently only work Linux are distro intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
+
+If you're not using one of these distros, or if you're using a Solaris or BSD based system you'll need to use processes promises.
+
+# Ensuring processes are not running; using services
+
+    bundle agent stop_bluetoothd {
+      services:
+    
+        "bluetoothd"
+          service_policy => "stop";
+    }
+
+This policy uses a `services` promise type to ensure that Bluetooth services are not running. Again, this only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
+
+The same restrictions about distros apply to stoping services promises.
+
 
 # installing packages
 
 # deleting old log files
 
 # Check a Filesystem for Low Disk Space
+
+# Bootstrap a client/server environment
+
+Prerequisites:
+
+* Install cfengine on server
+* Server FQDN is set properly on host and in DNS
+
+Server Side
+
+1. Edit promises.cf to set ACL
+2. Run `cf-agent --bootstrap -s $(hostname --fqdn)`
+3. Run `cf-agent -KI`
+
+Client Side
+
+1. Run `cfagent --bootstrap -s server.fqdn.example.com`
 
 # Administratively:
 
@@ -312,5 +511,4 @@ Note: The values for `owners` and `groups` is enclosed in curly braces. This is 
 
 # Pro Tips
 
-TODO: list
-
+* Don't edit `cfengine_stdlib.cf`. Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github](http://github.com/cfengine/core).

@@ -32,7 +32,7 @@ You can get a copy of this presentation any time on Github.
 
 <http://github.com/bahamat/cf-primer>
 
-
+This presentation will be updated in the future, but you can find the exact version used today tagged with today's date.
 
 # Components of CFEngine
 
@@ -147,6 +147,7 @@ This is an example promise.
 * The **promiser** is the POSIX path `/tmp/hello/world`.
 * This promise has only one **attribute**, specifying that the file should be created if it does not exist.
 * The **promisee** is *you!*
+* To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
 
 # Bundles
 
@@ -227,7 +228,7 @@ The **CFEngine Standard Library** comes bundled with CFEngine in the file `cfeng
 
 The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the standard library well, it will save you much time.
 
-# Putting it all together
+# Putting it All together
 
 These are the building blocks. You now know what they all are.
 
@@ -235,7 +236,11 @@ These are the building blocks. You now know what they all are.
 
 You'll now be walked through some example bundles (and accompanying bodies) that will  each accomplish a single atomic task.
 
-|      Let's see it in practice.
+<!-- In each example that includes a complete bundle, try running it on your virtual machine. Save all of the files for future ~~cannibalization~~ reference.
+
+To execute a policy run the following command:
+
+    $ cf-agent --file ./test.cf --bundle bundlename -->
 
 # Set File Permissions
 
@@ -302,6 +307,8 @@ A **class** is like a tag (like tagging a photo). Classes are used to give a pro
 1. **Hard classes**. These are classes that CFEngine will create automatically. Hard classes are determined based on the system attributes. For example a server running Linux will have the class `linux`.
 2. **Soft classes**. These are classes that are defined by you. You can create them based on the outcome of a promise, based on the existence of other classes, or for no reason.
 
+# Example Classes From a Live System
+
 Here is a list of hard classes defined on an actual system running CFEngine.
 
     cf3>  -> Hard classes = { 127_0_0_2 2_cpus 32_bit April Day23 Evening GMT_Hr3
@@ -313,7 +320,7 @@ Here is a list of hard classes defined on an actual system running CFEngine.
     linux_i686_2_6_18_pony6_3__1_SMP_Tue_Mar_13_07_31_44_PDT_2012
     mac_00_00_00_00_00_00 net_iface_eth0 verbose_mode } 
 
-# Use classes to control promise selection
+# Use Classes to Control Promise Selection
 
     bundle agent apache_config {
       files:
@@ -334,7 +341,7 @@ This set of promises will copy the appropriate apache config file depending on t
 
 Thus, only Debian systems will run the `debian::` context promise, only Red Hat will run `redhat::` and only Solaris will run `solaris::`.
 
-# A note about classes and distributions based on other distributions
+# A Note About Classes and Distributions Based on Other Distributions
 
 I said that only Debian systems will run `debian::` and only Red Hat will run `redhat::`. This isn't exactly true.
 
@@ -343,7 +350,7 @@ I said that only Debian systems will run `debian::` and only Red Hat will run `r
 
 This goes for any distro that is based on another distro. The "parent" classes will be also defined.
 
-# Use classes to control flow
+# Use Classes to Control Flow
 
     bundle agent apache_config {
       files:
@@ -362,7 +369,7 @@ This set of promises will first copy the Apache configuration file. Once the Apa
 
 When CFEngine reaches the commands section, if the `RestartApache` class is defined (which only happens if the config file is updated) then Apache will be restarted.
 
-# Use classes to control flow
+# Use Classes to Control Flow
 
     bundle agent apache_config {
       files:
@@ -385,7 +392,7 @@ So, the workflow then is:
 
 I use this ALL. THE. TIME. If this class is to teach you 20% that accomplishes 80%, *this slide* is the 5% that accomplishes 95%.
 
-# Compound class context
+# Compound Classes
 
     ...
       commands:
@@ -397,17 +404,24 @@ I use this ALL. THE. TIME. If this class is to teach you 20% that accomplishes 8
 
 This example is similar to the last one, except that Debian and Redhat each have different commands used to restart Apache. Therefore, we use a compound boolean class context. The expression `RestartApache.debian` means "RestartApache *and* debian".
 
-* Operators `.` and `&` are boolean *and*.
-* Operators `|` and `||` are boolean *or*.
-* Operator  `!` is boolean *not*.
-* Parenthesis `()` can be used to group boolean expressions.
+# Compound Classes
 
-Examples:
+    ...
+      commands:
+        RestartApache.debian::
+          "/usr/sbin/apache2ctl graceful";
+        RestartApache.redhat::
+          "/usr/sbin/apachectl graceful";
+    }
 
-* `(redhat.Monday)|(debian.Tuesday)`
-* `debian.!ubuntu`
+  Operator       Meaning            Example
+-------------    -----------        --------
+  `.` and `&`       boolean *and*      `debian.Tuesday::`
+  `|` and `||`      boolean *or*       `Tuesday|Wednesday::`
+  `!`            boolean *not*      `!Monday::`
+  `( )`          Explicit grouping  `(debian|redhat).!ubuntu.!centos::`
 
-# Keep services running; using processes
+# Keep Services Running: Using Processes
 
     bundle agent apache {
     
@@ -426,7 +440,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 When CFEngine executes `commands` promises Apache will be started.
 
-# Ensuring processes are not running; using processes and commands
+# Ensuring Processes are Not Running: Using Processes and Commands
 
     bundle agent stop_cups {
     
@@ -438,7 +452,7 @@ When CFEngine executes `commands` promises Apache will be started.
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. If it is found the `process_stop` command is executed.
 
-# Ensuring processes are not running; using processes and signals
+# Ensuring Processes are Not Running: Using Processes and Signals
 
     bundle agent stop_cups {
     
@@ -452,7 +466,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 **Note:** The promise `"bluetoothd"` becomes the *regular expression*, `.*bluetoothd.*` that is matched against the output of `ps`. This means that it can match *anywhere* on the line, not just the process name field. *Caveat emptor!*
 
-# Keep services running; using services
+# Keep Services Running: Using Services
 
     bundle agent apache {
       services:
@@ -467,7 +481,7 @@ This uses the `services` promise type to ensure that Apache is always running. T
 
 If you're not using one of these distros, or if you're using a Solaris or BSD based system you'll need to use processes promises.
 
-# Ensuring processes are not running; using services
+# Ensuring Processes are Not Running: Using Services
 
     bundle agent stop_bluetoothd {
       services:
@@ -480,35 +494,79 @@ This policy uses a `services` promise type to ensure that Bluetooth services are
 
 The same restrictions about distros apply to stoping services promises.
 
+# Package Management
 
-# installing packages
+    bundle agent install {
+      packages:
+        "zsh"
+          package_policy  => "addupdate",
+          package_method  => apt,
+          package_select  => ">=",
+          package_version => "4.3.10-14";
+    }
 
-# deleting old log files
+* The `package_policy` of `"add update"` will install or upgrade. Using `add` will only install, ever upgrade, `upgrade` will upgrade only and `delete` will uninstall.
+* The `package_method` of `apt` is in `cfengine_stdlib.cf`, look there for other package methods (e.g., rpm, ips, etc.).
+* The `package_select` of `">="` means the installed version must be equal to or newer than the specified version or it will be replaced. Using `"<="` would downgrade, if the `package_method` supports downgrading and `"=="` will require the exact version.
 
-# Check a Filesystem for Low Disk Space
+# Deleting Old Files
+
+    bundle agent tidy {
+      files:
+        "/var/log/.*"
+          file_select => days_old("7"),
+          delete => tidy;
+    }
+
+This policy will delete any files in `/var/log/` older than 7 days. The `days_old()` and `tidy` bodies are included in `cfengine_stdlib.cf`.
+
+To delete a file indiscriminately, omit the `file_select`.
+
+Look up `file_select` and `tidy` in the CFEngine Reference Manual to find more ways to use this.
 
 # Bootstrap a client/server environment
 
-Prerequisites:
+Before starting you need to install cfengine manually on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). The server policy files are in `/var/cfengine/masterfiles` and are copied to `/var/cfengine/inputs` on all clients (including itself).
 
-* Install cfengine on server
-* Server FQDN is set properly on host and in DNS
+#### Server Side
 
-Server Side
+Edit `/var/cfengine/masterfiles/promises.cf` to set the `"acl"` list, then run the following:
 
-1. Edit promises.cf to set ACL
-2. Run `cf-agent --bootstrap -s $(hostname --fqdn)`
-3. Run `cf-agent -KI`
+<!-- -->
 
-Client Side
+    cf-agent --bootstrap -s $(hostname --fqdn)
+    cf-agent -KI
 
-1. Run `cfagent --bootstrap -s server.fqdn.example.com`
+#### Client Side
 
-# Administratively:
+Simply run: 
+<!-- -->
 
-- keeping track of what repairs were done and which failed
-- debugging (using verbose mode)
+    cfagent --bootstrap -s server.fqdn.example.com
+
+Now edit the policy in `/var/cfengine/masterfiles` on the server and watch for it to happen on the client.
+
+# Keep Track of Promises Repaired and Promises Not Repaired
+
+CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log message:
+
+    1366956065,1366956068: Outcome of version Community Promises.cf 1.0.0 (agent-0):
+      Promises observed to be kept 100%, Promises repaired 0%, Promises not repaired 0%
+
+CFEngine will also send an email to the configured address in `promises.cf` any time there is output from an agent run.
+
+And finally you can use the `-I` flag to have CFEngine *inform* you of repairs. (Shown here along with the `-K` flag which ignores any lock timers).
+
+    cf-agent -KI
+
+# Debugging: Using Verbose Mode
+
+# Debugging: Using Comments
+
+# Debugging: Using Promise Handles
 
 # Pro Tips
 
-* Don't edit `cfengine_stdlib.cf`. Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github](http://github.com/cfengine/core).
+* Don't edit `cfengine_stdlib.cf`. Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github][cfengine].
+
+[cfengine]: http://github.com/cfengine/core

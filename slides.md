@@ -530,7 +530,7 @@ Before starting you need to install cfengine manually on the server and the clie
 
 #### Server Side
 
-Edit `/var/cfengine/masterfiles/promises.cf` to set the `"acl"` list, then run the following:
+Edit `/var/cfengine/masterfiles/def.cf` to set the `"acl"` list, then run:
 
 <!-- -->
 
@@ -553,6 +553,8 @@ CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log mess
     1366956065,1366956068: Outcome of version Community Promises.cf 1.0.0 (agent-0):
       Promises observed to be kept 100%, Promises repaired 0%, Promises not repaired 0%
 
+**Note:** The timestamp is a Unix epoch.
+
 CFEngine will also send an email to the configured address in `promises.cf` any time there is output from an agent run.
 
 And finally you can use the `-I` flag to have CFEngine *inform* you of repairs. (Shown here along with the `-K` flag which ignores any lock timers).
@@ -561,9 +563,58 @@ And finally you can use the `-I` flag to have CFEngine *inform* you of repairs. 
 
 # Debugging: Using Verbose Mode
 
+Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful
+
+    $ cf-agent -Kv
+
+When viewing debug output, look for `BUNDLE <name>` of the bundle that you suspect is having trouble.
+
+    cf3> *****************************************************************
+    cf3> BUNDLE main
+    cf3> *****************************************************************
+
+CFEngine will tell you exactly what is going on with each promise.
+
+    cf3>     Promise made by: "/var/spool/cron/crontabs/sys"
+    cf3> 
+    cf3>  -> Using literal pathtype for /var/spool/cron/crontabs/sys
+    cf3>  -> File "/var/spool/cron/crontabs/sys" exists as promised
+
 # Debugging: Using Comments
 
+CFEngine supports **comments** as part of its data structure. Every promise can have a `comment` attribute whose value is a quoted text string.
+
+    "/etc/bind/named.cache"
+      copy_from => scp("$(def.files)/bind/named.cache"),
+      comment   => "More recent copy of named.cache than shipped with bind";
+
+Comments show up in the verbose output.
+
+    cf3>     Promise made by: "/etc/bind/named.cache"
+    cf3>     Comment:  More recent copy of named.cache than shipped with bind
+
+The comment should always be *why* the promise is being made. Up until now none of the examples have used comments to save space on the slide. When writing your policies for real *every* promise should have a meaningful comment.
+
+You'll thank me when this saves the day.
+
 # Debugging: Using Promise Handles
+
+Something else that is useful when debugging are promise **handles**. Again, every promise can have a `handle` attribute whose value is a quoted canonical string.
+
+    "/etc/bind/named.cache"
+      copy_from => scp("$(def.files)/bind/named.cache"),
+      handle    => "update_etc_bind_named_cache",
+      comment   => "More recent copy of named.cache than shipped with bind";
+
+CFEngine will tell you the handle of each promise in the debug output.
+
+    cf3>     Promise's handle: update_etc_bind_named_cache
+    cf3>     Promise made by: "/etc/bind/db.root"
+    cf3>     Comment:  More recent copy of named.cache than shipped with bind
+
+By giving each promise a unique handle you can swiftly jump back and forth between your debug output and your policy file. When writing your policies for real *every* promise should have a unique handle.
+
+You'll thank me when this saves the day.
 
 # Pro Tips
 

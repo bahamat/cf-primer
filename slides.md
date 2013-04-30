@@ -188,7 +188,7 @@ For now you will only create `agent` or `common` bundles.
 
 # Bodies
 
-I stated before that the attributes of a promise are called the body. The value of an attribute can also be another **body**.
+I stated before that the attributes of a promise, collectively, are called the body. The value of any one attribute can also be an external **body**.
 
 A **body** is a collection of *attributes*. These are attributes that supplement the promise.
 
@@ -199,12 +199,12 @@ A **body** is a collection of *attributes*. These are attributes that supplement
       attribute2 => "value";
     }
 
-The major difference between a *bundle* and a *body* is that a bundle contains *promises* while a *body* contains only *attributes*.
+The difference between a *bundle* and a *body* is that a bundle contains *promises* while a *body* contains only *attributes*.
 
 Take a moment to let this sink in.
 
 * A **bundle** is a collection of *promises*.
-* A **body** is a collection of *attributes* that is applied to a promise.
+* A **body** is a collection of *attributes* that are applied to a promise.
 
 The distinction is subtle, especially at first and many people are tripped up by this.
 
@@ -234,23 +234,25 @@ These are the building blocks. You now know what they all are.
 
 ### Congratulations!
 
-You'll now be walked through some example bundles (and accompanying bodies) that will  each accomplish a single atomic task.
+You'll now be walked through some example bundles (and accompanying bodies) that will  each accomplish a single atomic task each.
 
-<!-- In each example that includes a complete bundle, try running it on your virtual machine. Save all of the files for future ~~cannibalization~~ reference.
+In each example that includes a complete bundle, try running it on your virtual machine. Save all of the files for future ~~cannibalization~~ reference.
 
 To execute a policy run the following command:
 
-    $ cf-agent --file ./test.cf --bundle bundlename -->
+    $ cf-agent --file ./test.cf --bundle bundlename
+    
+**Note:** Make sure you use the correct file and bundle name!
 
 # Set File Permissions
 
     bundle agent example {
       files:
-        "/etc/shadow"     perms => root_shadow;
-        "/etc/gshadow"    perms => root_shadow;
+        "/etc/shadow"     perms => perms_for_shadow_files;
+        "/etc/gshadow"    perms => perms_for_shadow_files;
     }
 
-    body perms root_shadow {
+    body perms perms_for_shadow_files {
       owners => { "root" };
       groups => { "shadow" };
       mode   => "0640";
@@ -304,8 +306,8 @@ Note: The values for `owners` and `groups` is enclosed in curly braces. This is 
 
 A **class** is like a tag (like tagging a photo). Classes are used to give a promise *context*. There are two types of classes.
 
-1. **Hard classes**. These are classes that CFEngine will create automatically. Hard classes are determined based on the system attributes. For example a server running Linux will have the class `linux`.
-2. **Soft classes**. These are classes that are defined by you. You can create them based on the outcome of a promise, based on the existence of other classes, or for no reason.
+1. **Built in classes**. These are classes that CFEngine will create automatically. Hard classes are determined based on the system attributes. For example a server running Linux will have the class `linux`.
+2. **User defined classes**. These are classes that are defined by you. You can create them based on the outcome of a promise, based on the existence of other classes, or for no reason.
 
 # Example Classes From a Live System
 
@@ -318,13 +320,13 @@ Here is a list of hard classes defined on an actual system running CFEngine.
     i686 ipv4_127 ipv4_127_0 ipv4_127_0_0 ipv4_127_0_0_2 linux linux_2_6_18_pony6_3
     linux_i686 linux_i686_2_6_18_pony6_3
     linux_i686_2_6_18_pony6_3__1_SMP_Tue_Mar_13_07_31_44_PDT_2012
-    mac_00_00_00_00_00_00 net_iface_eth0 verbose_mode } 
+    mac_00_00_00_00_00_00 net_iface_eth0 verbose_mode }
 
 # Use Classes to Control Promise Selection
 
     bundle agent apache_config {
       files:
-        
+
         debian::
           "/etc/apache2/apache2.conf"
             copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)");
@@ -334,12 +336,30 @@ Here is a list of hard classes defined on an actual system running CFEngine.
         solaris::
           "/etc/apache2/2.2/httpd.conf"
             copy_from => remote_cp("/cfengine/repo/solaris/httpd.conf","$(sys.policy_hub)");
-    
+
     }
 
 This set of promises will copy the appropriate apache config file depending on the type of server. Notice that each file promise is prefixed by a *class*. The promise will be skipped unless that class is defined on the system.
 
 Thus, only Debian systems will run the `debian::` context promise, only Red Hat will run `redhat::` and only Solaris will run `solaris::`.
+
+# Promise Type and Class Context Can be Implicit
+
+The **promise type** and **class context** don't need to be listed for every promise. Think of each like a heading in an outline. Everything that follows is still under the same heading until a new heading is declared. If a new promise type is declared the class context is reset as well.
+
+    files:
+      solaris::
+        "/tmp/hello/world"
+          create => "true";
+        "/tmp/foo/bar"
+          create => "true";
+      linux::
+        "/dev/shm/hello_world"
+          create => "true";
+    commands:
+      "echo Hello World";
+
+The first three promises are of type `files`. The first two will only execute on `solaris` while the third will only execute on `linux`. The last promise has a new type of `commands` and will always execute.
 
 # A Note About Classes and Distributions Based on Other Distributions
 
@@ -354,13 +374,13 @@ This goes for any distro that is based on another distro. The "parent" classes w
 
     bundle agent apache_config {
       files:
-        
+
         "/etc/apache2/apache2.conf"
           copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)")
             classes => if_repaired("RestartApache");
 
       commands:
-      
+
         RestartApache::
           "/usr/sbin/apache2ctl graceful";
     }
@@ -373,13 +393,13 @@ When CFEngine reaches the commands section, if the `RestartApache` class is defi
 
     bundle agent apache_config {
       files:
-        
+
         "/etc/apache2/apache2.conf"
           copy_from => remote_cp("/cfengine/repo/debian/apache2.conf","$(sys.policy_hub)"),
             classes => if_repaired("RestartApache");
 
       commands:
-      
+
         RestartApache::
           "/usr/sbin/apache2ctl graceful";
     }
@@ -424,16 +444,16 @@ This example is similar to the last one, except that Debian and Redhat each have
 # Keep Services Running: Using Processes
 
     bundle agent apache {
-    
+
     processes:
-    
+
       "apache2"
         restart_class => "StartApache";
-    
+
     commands:
       StartApache::
         "/etc/init.d/apache2 start";
-      
+
     }
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*apache2.*`. If it is not found then the class `StartApache` will get defined.
@@ -442,22 +462,22 @@ When CFEngine executes `commands` promises Apache will be started.
 
 # Ensuring Processes are Not Running: Using Processes and Commands
 
-    bundle agent stop_cups {
-    
+    bundle agent stop_bluetooth {
+
       processes:
-   
+
         "bluetoothd"
-          process_stop => "/etc/init.d/cups stop";
+          process_stop => "/etc/init.d/bluetooth stop";
     }
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. If it is found the `process_stop` command is executed.
 
 # Ensuring Processes are Not Running: Using Processes and Signals
 
-    bundle agent stop_cups {
-    
+    bundle agent stop_bluetooth {
+
       processes:
-   
+
         "bluetoothd"
           signals => { "term", "kill" };
     }
@@ -470,7 +490,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
     bundle agent apache {
       services:
-    
+
         "www"
           service_policy => "start";
     }
@@ -485,7 +505,7 @@ If you're not using one of these distros, or if you're using a Solaris or BSD ba
 
     bundle agent stop_bluetoothd {
       services:
-    
+
         "bluetoothd"
           service_policy => "stop";
     }
@@ -524,34 +544,51 @@ To delete a file indiscriminately, omit the `file_select`.
 
 Look up `file_select` and `tidy` in the CFEngine Reference Manual to find more ways to use this.
 
-# Bootstrap a client/server environment
+# Setting Up a Client/Server Environment
 
-Before starting you need to install cfengine manually on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). The server policy files are in `/var/cfengine/masterfiles` and are copied to `/var/cfengine/inputs` on all clients (including itself).
+Before starting you need to have cfengine install on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
+
+Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list. 
+
+[ks]: http://fedoraproject.org/wiki/Anaconda/Kickstart
+[ps]: http://wiki.debian.org/DebianInstaller/Preseed
+[fai]: http://wiki.debian.org/FAI
+[cbl]: http://www.cobblerd.org
+[g4u]: http://www.osalt.com/g4u
+[ec2]: http://aws.amazon.com/ec2/
+
+# Bootstraping the Server and Client
 
 #### Server Side
 
-Edit `/var/cfengine/masterfiles/def.cf` to set the `"acl"` list, then run:
-
-<!-- -->
+Edit `/var/cfengine/masterfiles/def.cf` to set the `"acl"` list for the IP addresses of your network, then run:
 
     cf-agent --bootstrap -s $(hostname --fqdn)
     cf-agent -KI
 
 #### Client Side
 
-Simply run: 
-<!-- -->
+Simply run:
 
     cfagent --bootstrap -s server.fqdn.example.com
 
-Now edit the policy in `/var/cfengine/masterfiles` on the server and watch for it to happen on the client.
+# Managing and Distributing Policies
+
+The policy files are in `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`) and are copied to `/var/cfengine/inputs` on all clients (Note: the `policy_hub` is also a client of itself).
+
+Now edit the policy in `/var/cfengine/masterfiles` on the server and watch for the changes to happen on the client.
+
+As you write new policies, each bundle needs to be listed in the `bundlesequence` and each file needs to be listed in `inputs`. Both of these are under `body common control` inside of `promises.cf`.
+
+Bundles are executed in the order they are listed in the `bundlesequence`, but `inputs` can be listed in any order.
 
 # Keep Track of Promises Repaired and Promises Not Repaired
 
 CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log message:
 
-    1366956065,1366956068: Outcome of version Community Promises.cf 1.0.0 (agent-0):
-      Promises observed to be kept 100%, Promises repaired 0%, Promises not repaired 0%
+    1366956065,1366956068: Outcome of version Community Promises.cf 1.0.0
+      (agent-0): Promises observed to be kept 100%, Promises repaired 0%,
+      Promises not repaired 0%
 
 **Note:** The timestamp is a Unix epoch.
 
@@ -576,7 +613,7 @@ When viewing debug output, look for `BUNDLE <name>` of the bundle that you suspe
 CFEngine will tell you exactly what is going on with each promise.
 
     cf3>     Promise made by: "/var/spool/cron/crontabs/sys"
-    cf3> 
+    cf3>
     cf3>  -> Using literal pathtype for /var/spool/cron/crontabs/sys
     cf3>  -> File "/var/spool/cron/crontabs/sys" exists as promised
 
@@ -618,6 +655,9 @@ You'll thank me when this saves the day.
 
 # Pro Tips
 
-* Don't edit `cfengine_stdlib.cf`. Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github][cfengine].
+* **Don't edit `cfengine_stdlib.cf`.** Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github][cfengine].
+* **Make built-in classes and user defined classes easy to distinguish by sight.** CFEngine creates hard classes `all_lower_case_separated_by_underscores`. Whenever I define classes myself I use `CamelCase`.
+* **Not sure how to organize `masterfiles`?** Check [A Case Study in CFEngine Layout][layout] by Brian Bennett.
 
 [cfengine]: http://github.com/cfengine/core
+[layout]: https://digitalelf.net/2013/04/a-case-study-in-cfengine-layout/

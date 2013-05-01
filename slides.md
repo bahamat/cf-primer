@@ -241,7 +241,7 @@ In each example that includes a complete bundle, try running it on your virtual 
 To execute a policy run the following command:
 
     $ cf-agent --file ./test.cf --bundle bundlename
-    
+
 **Note:** Make sure you use the correct file and bundle name!
 
 # Set File Permissions
@@ -260,10 +260,10 @@ To execute a policy run the following command:
 
 * This is an **agent** bundle (meaning that it is processed by `cf-agent`).
 * Its purpose is to set the permissions on `/etc/shadow` and `/etc/gshadow`.
-* It uses an external body named `root_shadow`.
+* It uses an external body named `perms_for_shadow_files`.
 * The body only needs to be defined once and can be reused for any number of promises.
 
-Note: The values for `owners` and `groups` is enclosed in curly braces. This is because these attributes take a list (`slist`).
+Note: The values for `owners` and `groups` is enclosed in curly braces. This is because these attributes take a list of strings (aka, an `slist`).
 
 # Copy an Entire File
 
@@ -414,25 +414,21 @@ I use this ALL. THE. TIME. If this class is to teach you 20% that accomplishes 8
 
 # Compound Classes
 
-    ...
       commands:
         RestartApache.debian::
           "/usr/sbin/apache2ctl graceful";
         RestartApache.redhat::
           "/usr/sbin/apachectl graceful";
-    }
 
 This example is similar to the last one, except that Debian and Redhat each have different commands used to restart Apache. Therefore, we use a compound boolean class context. The expression `RestartApache.debian` means "RestartApache *and* debian".
 
 # Compound Classes
 
-    ...
       commands:
         RestartApache.debian::
           "/usr/sbin/apache2ctl graceful";
         RestartApache.redhat::
           "/usr/sbin/apachectl graceful";
-    }
 
   Operator       Meaning            Example
 -------------    -----------        --------
@@ -497,7 +493,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 This uses the `services` promise type to ensure that Apache is always running. This only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
 
-`services` promises currently only work Linux are distro intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
+`services` promises currently only work Linux and are distro intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
 
 If you're not using one of these distros, or if you're using a Solaris or BSD based system you'll need to use processes promises.
 
@@ -548,7 +544,7 @@ Look up `file_select` and `tidy` in the CFEngine Reference Manual to find more w
 
 Before starting you need to have cfengine install on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
 
-Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list. 
+Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list.
 
 [ks]: http://fedoraproject.org/wiki/Anaconda/Kickstart
 [ps]: http://wiki.debian.org/DebianInstaller/Preseed
@@ -570,7 +566,7 @@ Edit `/var/cfengine/masterfiles/def.cf` to set the `"acl"` list for the IP addre
 
 Simply run:
 
-    cfagent --bootstrap -s server.fqdn.example.com
+    cf-agent --bootstrap -s server.fqdn.example.com
 
 # Managing and Distributing Policies
 

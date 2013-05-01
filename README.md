@@ -10,6 +10,8 @@ or later (but possibly earlier) to convert `slides.md` into `slides.html`.
 (Debian stable is unfortunately 1.5.1.1 and does not have support for some
 of the options I use).
 
+You will also need [graphviz](http://www.graphviz.org).
+
 ## Getting Started.
 
 1. Once you have `pandoc` installed simply run `make` to build `slides.html`.

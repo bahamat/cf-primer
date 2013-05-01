@@ -1,0 +1,29 @@
+digraph policy_propagation {
+  node [ shape = box ];
+
+  subgraph cluster_0 {
+    h_masterfiles [ label = "/var/cfengine/masterfiles" color = blue style = filled fillcolor = white ]
+    h_inputs [ label = "/var/cfengine/inputs" color = blue style = filled fillcolor = white ]
+    h_masterfiles -> h_inputs;
+    label = "policy_hub";
+    style = filled;
+  }
+
+  subgraph cluster_1 {
+    c1_inputs [ label = "/var/cfengine/inputs" color = blue style = filled fillcolor = white ]
+    c1_inputs;
+    label = "client1";
+    style = filled;
+  }
+
+  subgraph cluster_2 {
+    c2_inputs [ label = "/var/cfengine/inputs" color = blue style = filled fillcolor = white ]
+    c2_inputs;
+    label = "client2";
+    style = filled;
+  }
+
+  h_inputs -> c1_inputs;
+  h_inputs -> c2_inputs;
+
+}

@@ -1,5 +1,6 @@
 % CF-Primer: Zero to Hero
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
+  with Aleksey Tsalolikhin <aleksey@verticalsysadmin.com>
 % 2013-04-13
 
 # Welcome!
@@ -33,6 +34,10 @@ You can get a copy of this presentation any time on Github.
 <http://github.com/bahamat/cf-primer>
 
 This presentation will be updated in the future, but you can find the exact version used today tagged with today's date.
+
+Aleksey has also prepared a quick reference guide.
+
+<http://www.verticalsysadmin.com/cfengine/primer.pdf>
 
 # Components of CFEngine
 
@@ -651,11 +656,26 @@ By giving each promise a unique handle you can swiftly jump back and forth betwe
 
 You'll thank me when this saves the day.
 
+# The Rest
+
+Here's a list of topics that I didn't cover. This is to give you a taste of the rest of the power that is behind CFEngine. Dig deeper by checking them out in the reference manual.
+
+* `vars:` promises — Varables, strings, integers and reals (and lists of each).
+* `methods:` promises — Create a self contained bundle that can be called like a function.
+* `guest_environments:` promises — Promise the existence of virtual machines.
+* `storage:` promises — For local or remote (NFS) filesystems.
+* `database` promises — Promise the schema of your database, CFEngine does the SQL for you.
+* `edit_xml:` promises - Promise by path, CFEngine does the XML for you.
+* `interfaces:` promises — Promise your network settings
+* Monitoring — Using data from `cf-monitor`.
+* Implicit looping — Pass a list to a promise and it loops over the values in the list.
+
 # Pro Tips
 
 * **Don't edit `cfengine_stdlib.cf`.** Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github][cfengine].
 * **Make built-in classes and user defined classes easy to distinguish by sight.** CFEngine creates hard classes `all_lower_case_separated_by_underscores`. Whenever I define classes myself I use `CamelCase`.
 * **Not sure how to organize `masterfiles`?** Check [A Case Study in CFEngine Layout][layout] by Brian Bennett.
+* **Use `git`** to revision control `masterfiles`.
 
 [cfengine]: http://github.com/cfengine/core
 [layout]: https://digitalelf.net/2013/04/a-case-study-in-cfengine-layout/

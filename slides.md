@@ -56,13 +56,13 @@ However, you will almost always use only `cf-agent`.
 
 # cf-monitord
 
-`cf-monitord` monitors various statistics about the running system. This information is made available in the form of **classes**.
+`cf-monitord` monitors various statistics about the running system. This information is made available in the form of **classes** and **variables**..
 
-You'll almost never use `cf-monitord` directly. However the classes provided by `cf-monitord` are available to `cf-agent`.
+You'll almost never use `cf-monitord` directly. However the data provided by `cf-monitord` is available to `cf-agent`.
 
 # cf-execd
 
-`cf-execd` is a periodic task scheduler. You can think of it like `cron` on sterroids.
+`cf-execd` is a periodic task scheduler. You can think of it like `cron` on steroids.
 
 By default CFEngine runs and enforces policies every *five minutes*. `cf-execd` is resposible for making that happen.
 
@@ -99,7 +99,7 @@ In other words, a declarative system can begin in *any* state, not simply a know
 
 Declarative states a list of things which must be true. It does not state how to make them true.
 
-When a system as reached the desired state it is said to have reached **convergence**.
+When a system has reached the desired state it is said to have reached **convergence**.
 
 # Promise Theory
 
@@ -526,7 +526,7 @@ The same restrictions about distros apply to stoping services promises.
           package_version => "4.3.10-14";
     }
 
-* The `package_policy` of `"add update"` will install or upgrade. Using `add` will only install, ever upgrade, `upgrade` will upgrade only and `delete` will uninstall.
+* The `package_policy` of `"add update"` will install or upgrade. Using `add` will only install, never upgrade, `upgrade` will upgrade only and `delete` will uninstall.
 * The `package_method` of `apt` is in `cfengine_stdlib.cf`, look there for other package methods (e.g., rpm, ips, etc.).
 * The `package_select` of `">="` means the installed version must be equal to or newer than the specified version or it will be replaced. Using `"<="` would downgrade, if the `package_method` supports downgrading and `"=="` will require the exact version.
 
@@ -676,6 +676,7 @@ Here's a list of topics that I didn't cover. This is to give you a taste of the 
 * **Make built-in classes and user defined classes easy to distinguish by sight.** CFEngine creates hard classes `all_lower_case_separated_by_underscores`. Whenever I define classes myself I use `CamelCase`.
 * **Not sure how to organize `masterfiles`?** Check [A Case Study in CFEngine Layout][layout] by Brian Bennett.
 * **Use `git`** to revision control `masterfiles`.
+* **Syntax errors?** Only read the very first error. Fix it, then try again. A missing character in one promise will throw the whole file off.
 
 [cfengine]: http://github.com/cfengine/core
 [layout]: https://digitalelf.net/2013/04/a-case-study-in-cfengine-layout/

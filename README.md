@@ -28,6 +28,8 @@ Using Homebrew is workable, although not as simple or straightforward as I
 would like.
 
     brew install haskell-platform
+    cabal update
+    cabal install cabal-install
     cabal install pandoc
 
 `pandoc` will be installed to `~/.cabal/bin/pandoc`. You will need to ensure

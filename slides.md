@@ -105,7 +105,7 @@ When a system has reached the desired state it is said to have reached **converg
 
 Promise theory is a model of voluntary cooperation between individual, autonomous actors or agents who publish their intentions to one another in the form of promises.
 
-A file (e.g., `/etc/apache2/httpd.conf`) can make promises about it's own contents, attributes, etc. But it does not make any promises about a process.
+A file (e.g., `/etc/apache2/httpd.conf`) can make promises about its own contents, attributes, etc. But it does not make any promises about a process.
 
 A process (e.g., `httpd`) can make a promise that it will be running. But it does not make any promises about its configuration.
 
@@ -239,7 +239,7 @@ These are the building blocks. You now know what they all are.
 
 ### Congratulations!
 
-You'll now be walked through some example bundles (and accompanying bodies) that will  each accomplish a single atomic task each.
+You'll now be walked through some example bundles (and accompanying bodies) that will accomplish a single atomic task each.
 
 In each example that includes a complete bundle, try running it on your virtual machine. Save all of the files for future ~~cannibalization~~ reference.
 
@@ -370,7 +370,7 @@ The first three promises are of type `files`. The first two will only execute on
 
 I said that only Debian systems will run `debian::` and only Red Hat will run `redhat::`. This isn't exactly true.
 
-* Ubuntu is based on Debian, and so will have both `ubuntu` and `debian` defined as a hard classes.
+* Ubuntu is based on Debian, and so will have both `ubuntu` and `debian` defined as hard classes.
 * Likewise, CentOS is based on Red Hat and so will have both `centos` and `redhat` defined as hard classes.
 
 This goes for any distro that is based on another distro. The "parent" classes will be also defined.
@@ -498,7 +498,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 This uses the `services` promise type to ensure that Apache is always running. This only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
 
-`services` promises currently only work Linux and are distro intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
+`services` promises currently only work on Linux and are distro-intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
 
 If you're not using one of these distros, or if you're using a Solaris or BSD based system you'll need to use processes promises.
 
@@ -513,7 +513,7 @@ If you're not using one of these distros, or if you're using a Solaris or BSD ba
 
 This policy uses a `services` promise type to ensure that Bluetooth services are not running. Again, this only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
 
-The same restrictions about distros apply to stoping services promises.
+The same restrictions about distros apply to stopping services promises.
 
 # Package Management
 
@@ -547,7 +547,7 @@ Look up `file_select` and `tidy` in the CFEngine Reference Manual to find more w
 
 # Setting Up a Client/Server Environment
 
-Before starting you need to have cfengine install on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
+Before starting you need to have cfengine installed on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
 
 Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list.
 
@@ -639,7 +639,7 @@ You'll thank me when this saves the day.
 
 # Debugging: Using Promise Handles
 
-Something else that is useful when debugging are promise **handles**. Again, every promise can have a `handle` attribute whose value is a quoted canonical string.
+When debugging, promise **handles** are also useful. Again, every promise can have a `handle` attribute whose value is a quoted canonical string.
 
     "/etc/bind/named.cache"
       copy_from => scp("$(def.files)/bind/named.cache"),
@@ -661,7 +661,7 @@ You'll thank me when this saves the day.
 Here's a list of topics that I didn't cover. This is to give you a taste of the rest of the power that is behind CFEngine. Dig deeper by checking them out in the reference manual.
 
 * `vars:` promises — Varables, strings, integers and reals (and lists of each).
-* `methods:` promises — Create a self contained bundle that can be called like a function.
+* `methods:` promises — Create a self-contained bundle that can be called like a function.
 * `guest_environments:` promises — Promise the existence of virtual machines.
 * `storage:` promises — For local or remote (NFS) filesystems.
 * `database` promises — Promise the schema of your database, CFEngine does the SQL for you.

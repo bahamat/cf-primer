@@ -93,7 +93,7 @@ Imperative starts at known state A and transforms to known state B.
 
 # Declarative is Descriptive
 
-Declarative moves from chaos to order. It is not a list of steps to arrive at a state but merely a **description** of the desired state. Because of this any deviation from the desired state can be detected and corrected.
+Declarative moves from chaos to order. It is not a list of steps to arrive achiev an outcome but a **description** of the desired state. Because of this any deviation from the desired state can be detected and corrected.
 
 In other words, a declarative system can begin in *any* state, not simply a known state, and transform into the desired state.
 
@@ -119,8 +119,8 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
           attribute1 => "value",
           attribute2 => "value";
 
-* **type** is the type of promise being made (e.g., files, commands, etc.).
-* **context** is an optional context. Promises with a context will only apply if the given context is true.
+* **type** is the kind of promise being made (e.g., files, commands, etc.).
+* **context** is an optional. Promises with a context will only apply if the given context is true.
 * **promiser** is what is making the promise. (e.g., a file or a process).
 * **promisee** is an optional recipient or beneficiary of the promise.
 
@@ -132,7 +132,7 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
           attribute1 => "value",
           attribute2 => "value";
 
-Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, but the available attributes will vary depending on the *promise type*.
+Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, and the available attributes will vary depending on the *promise type*.
 
 The value can be either a text string (which must be quoted) or another object (which must not be quoted). All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
 
@@ -229,7 +229,7 @@ The parameter `param` is accessed as a variable by `$(param)`. You can name your
 
 # The CFEngine Standard Library
 
-The **CFEngine Standard Library** comes bundled with CFEngine in the file `cfengine_stdlib.cf`.
+The **CFEngine Standard Library** comes bundled with CFEngine in the `masterfiles/lib/` directory.
 
 The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the standard library well, it will save you much time.
 
@@ -305,7 +305,7 @@ Note: The values for `owners` and `groups` is enclosed in curly braces. This is 
 * This will delete any line matching the regular expression `^PermitRootLogin.*`.
 * This also inserts the line `PermitRootLogin no` *at the end of the file*.
 * CFEngine is smart enough to know not to edit the file if the end result is already **converged**.
-* This is an overly simplistic example. When editing configuration files you probably want to copy the whole file or use `set_config_values()` from `cfengine_stdlib.cf`.
+* This is an overly simplistic example. When editing configuration files you probably want to copy the whole file or use `set_config_values()` from the standard library.
 
 # Introduction to Classes
 
@@ -364,7 +364,7 @@ The **promise type** and **class context** don't need to be listed for every pro
     commands:
       "echo Hello World";
 
-The first three promises are of type `files`. The first two will only execute on `solaris` while the third will only execute on `linux`. The last promise has a new type of `commands` and will always execute.
+The first three promises are of type `files`. The first two will only execute on `solaris` while the third will only execute on `linux`. The last promise has a new promise type, of `commands`, and will always execute.
 
 # A Note About Classes and Distributions Based on Other Distributions
 
@@ -496,7 +496,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
           service_policy => "start";
     }
 
-This uses the `services` promise type to ensure that Apache is always running. This only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
+This uses the `services` promise type to ensure that Apache is always running. This only works for services that are defined under `standard_services` in the standard library and requires cfengine 3.4.0 or higher.
 
 `services` promises currently only work on Linux and are distro-intelligent. That is, this promise example above works equally well on Debian/Ubuntu, Red Hat/CentOS or SUSE (and derived distros).
 
@@ -511,7 +511,7 @@ If you're not using one of these distros, or if you're using a Solaris or BSD ba
           service_policy => "stop";
     }
 
-This policy uses a `services` promise type to ensure that Bluetooth services are not running. Again, this only works for services that are defined under `standard_services` in `cfengine_stdlib.cf` and requires cfengine 3.4.0 or higher.
+This policy uses a `services` promise type to ensure that Bluetooth services are not running. Again, this only works for services that are defined under `standard_services` in the standard library and requires cfengine 3.4.0 or higher.
 
 The same restrictions about distros apply to stopping services promises.
 
@@ -527,10 +527,10 @@ The same restrictions about distros apply to stopping services promises.
     }
 
 * The `package_policy` of `"add update"` will install or upgrade. Using `add` will only install, never upgrade, `upgrade` will upgrade only and `delete` will uninstall.
-* The `package_method` of `apt` is in `cfengine_stdlib.cf`, look there for other package methods (e.g., rpm, ips, etc.).
+* The `package_method` of `apt` is in the standard library, look there for other package methods (e.g., rpm, ips, etc.).
 * The `package_select` of `">="` means the installed version must be equal to or newer than the specified version or it will be replaced. Using `"<="` would downgrade, if the `package_method` supports downgrading and `"=="` will require the exact version.
 
-# Deleting Old Files
+# Deleting Files
 
     bundle agent tidy {
       files:
@@ -539,7 +539,7 @@ The same restrictions about distros apply to stopping services promises.
           delete => tidy;
     }
 
-This policy will delete any files in `/var/log/` older than 7 days. The `days_old()` and `tidy` bodies are included in `cfengine_stdlib.cf`.
+This policy will delete any files in `/var/log/` older than 7 days. The `days_old()` and `tidy` bodies are included in the standard library,
 
 To delete a file indiscriminately, omit the `file_select`.
 
@@ -564,18 +564,20 @@ Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps],
 
 Edit `/var/cfengine/masterfiles/def.cf` to set the `"acl"` list for the IP addresses of your network, then run:
 
-    cf-agent --bootstrap -s $(hostname --fqdn)
+    cf-agent --bootstrap $(hostname --fqdn)
     cf-agent -KI
 
 #### Client Side
 
 Simply run:
 
-    cf-agent --bootstrap -s server.fqdn.example.com
+    cf-agent --bootstrap server.fqdn.example.com
+
+You can use the server's IP address instead of the DNS name.
 
 # Managing and Distributing Policies
 
-The policy files are in `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`) and are copied to `/var/cfengine/inputs` on all clients (Note: the `policy_hub` is also a client of itself).
+The policy files are in `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`) and are copied to `/var/cfengine/inputs`. All clients then copy `/var/cfengine/inputs` from the server.
 
 <div style="text-align:center">![](policy_propagation.png)</div>
 
@@ -672,11 +674,12 @@ Here's a list of topics that I didn't cover. This is to give you a taste of the 
 
 # Pro Tips
 
-* **Don't edit `cfengine_stdlib.cf`.** Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version. When you feel a bundle or body is ready you can submit it to CFEngine by opening a pull request on [Github][cfengine].
+* **Don't edit the standard library**. Create a `site_lib.cf` and add your custom library bundles and bodies there. This helps with upgrading because you won't have to patch your changes into the new version of the library. When you feel a bundle or body is ready for public use you can submit it to CFEngine by opening a pull request on [Github][masterfiles].
 * **Make built-in classes and user defined classes easy to distinguish by sight.** CFEngine creates hard classes `all_lower_case_separated_by_underscores`. Whenever I define classes myself I use `CamelCase`.
 * **Not sure how to organize `masterfiles`?** Check [A Case Study in CFEngine Layout][layout] by Brian Bennett.
 * **Use `git`** to revision control `masterfiles`.
 * **Syntax errors?** Only read the very first error. Fix it, then try again. A missing character in one promise will throw the whole file off.
 
 [cfengine]: http://github.com/cfengine/core
+[masterfiles]: http://github.com/cfengine/masterfiles
 [layout]: https://digitalelf.net/2013/04/a-case-study-in-cfengine-layout/

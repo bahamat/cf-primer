@@ -25,7 +25,7 @@ limitations under the License.
 
 CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine. In other words, you'll learn the 20% of CFEngine that will do 80% of the work.
 
-After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the reference manual.
+After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the [reference manual][reference-manual].
 
 # Fork Me on Github!
 
@@ -543,7 +543,10 @@ This policy will delete any files in `/var/log/` older than 7 days. The `days_ol
 
 To delete a file indiscriminately, omit the `file_select`.
 
-Look up `file_select` and `tidy` in the CFEngine Reference Manual to find more ways to use this.
+Look up [`file_select`][file_select] and [`tidy`][tidy] in the [CFEngine Reference Manual][reference-manual] to find more ways to use this.
+
+[file_select]: https://docs.cfengine.com/lts/reference-promise-types-files.html#file_select
+[tidy]: https://docs.cfengine.com/lts/reference-standard-library-files.html#tidy
 
 # Setting Up a Client/Server Environment
 
@@ -660,7 +663,7 @@ You'll thank me when this saves the day.
 
 # The Rest
 
-Here's a list of topics that I didn't cover. This is to give you a taste of the rest of the power that is behind CFEngine. Dig deeper by checking them out in the reference manual.
+Here's a list of topics that I didn't cover. This is to give you a taste of the rest of the power that is behind CFEngine. Dig deeper by checking them out in the [reference manual][reference-manual].
 
 * `vars:` promises — Varables, strings, integers and reals (and lists of each).
 * `methods:` promises — Create a self-contained bundle that can be called like a function.
@@ -683,3 +686,4 @@ Here's a list of topics that I didn't cover. This is to give you a taste of the 
 [cfengine]: http://github.com/cfengine/core
 [masterfiles]: http://github.com/cfengine/masterfiles
 [layout]: https://digitalelf.net/2013/04/a-case-study-in-cfengine-layout/
+[reference-manual]: https://docs.cfengine.com/lts/reference.html

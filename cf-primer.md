@@ -362,7 +362,7 @@ The **promise type** and **class context** don't need to be listed for every pro
         "/dev/shm/hello_world"
           create => "true";
     commands:
-      "echo Hello World";
+      "/bin/echo Hello World";
 
 The first three promises are of type `files`. The first two will only execute on `solaris` while the third will only execute on `linux`. The last promise has a new promise type, of `commands`, and will always execute.
 

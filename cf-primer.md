@@ -580,7 +580,9 @@ You can use the server's IP address instead of the DNS name.
 
 # Distributing Policies
 
-The policy files are distributed from `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`). Clients copy policy files from `/var/cfengine/masterfiles` on the server to `/var/cfengine/inputs` on each local host, and run the policy out of `/var/cfengine/inputs`.
+The policy files are distributed from `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`).
+
+Clients copy policy files from `/var/cfengine/masterfiles` on the server to `/var/cfengine/inputs` on each host. CFEngine reads policy out of `/var/cfengine/inputs` when it runs (even on the server).
 
 <div style="text-align:center">![](policy_propagation.png)</div>
 

@@ -578,13 +578,17 @@ Simply run:
 
 You can use the server's IP address instead of the DNS name.
 
-# Managing and Distributing Policies
+# Distributing Policies
 
-The policy files are in `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`) and are copied to `/var/cfengine/inputs`. All clients then copy `/var/cfengine/inputs` from the server.
+The policy files are distributed from `/var/cfengine/masterfiles` on the server (also known as the `policy_hub`). Clients copy policy files from `/var/cfengine/masterfiles` on the server to `/var/cfengine/inputs` on each local host, and run the policy out of `/var/cfengine/inputs`.
 
 <div style="text-align:center">![](policy_propagation.png)</div>
 
+Policy is cached locally in `/var/cfengine/inputs`. Clients can run CFEngine even when the server is unreachable, and update the cache opportunistically when they _can_ reach the server.
+
 Now edit the policy in `/var/cfengine/masterfiles` on the server and watch for the changes to happen on the client.
+
+# Adding Policies
 
 As you write new policies, each bundle needs to be listed in the `bundlesequence` and each file needs to be listed in `inputs`. Both of these are under `body common control` inside of `promises.cf`.
 

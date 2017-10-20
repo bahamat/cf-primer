@@ -5,7 +5,7 @@ digraph policy_propagation {
     h_masterfiles [ label = "/var/cfengine/masterfiles" color = blue style = filled fillcolor = white ]
     h_inputs [ label = "/var/cfengine/inputs" color = blue style = filled fillcolor = white ]
     h_masterfiles -> h_inputs;
-    label = "Policy Server";
+    label = "Server";
     style = filled;
   }
 

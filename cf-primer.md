@@ -596,6 +596,8 @@ As you write new policies, each bundle needs to be listed in the `bundlesequence
 
 Bundles are executed in the order they are listed in the `bundlesequence`, but `inputs` can be listed in any order.
 
+Remember to make your changes in `/var/cfengine/masterfiles` on the server -- if you make them in `/var/cfengine/inputs`, they will get overwritten.
+
 # Keep Track of Promises Repaired and Promises Not Repaired
 
 CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log message:

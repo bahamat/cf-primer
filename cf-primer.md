@@ -520,15 +520,22 @@ The same restrictions about distros apply to stopping services promises.
     bundle agent install {
       packages:
         "zsh"
-          package_policy  => "addupdate",
-          package_method  => apt,
-          package_select  => ">=",
-          package_version => "4.3.10-14";
+          policy  => "present",
+          package_module  => apt_get,
+          version => "4.3.10-4.1.el6";
     }
 
-* The `package_policy` of `"add update"` will install or upgrade. Using `add` will only install, never upgrade, `upgrade` will upgrade only and `delete` will uninstall.
-* The `package_method` of `apt` is in the standard library, look there for other package methods (e.g., rpm, ips, etc.).
-* The `package_select` of `">="` means the installed version must be equal to or newer than the specified version or it will be replaced. Using `"<="` would downgrade, if the `package_method` supports downgrading and `"=="` will require the exact version.
+(Note: This is the modern style of packages promises, introduced in CFEngine 3.7; there is a different syntax for packages promises in 3.6 and earlier.  Check the docs if you haven't upgraded to 3.7 or later.)
+
+The `policy` is the most important attribute.  It can be `"present"` or `"absent"`, depending on whether you want to install or uninstall.
+
+The next attribute, `package_module`, specifies how CFEngine should interface with the system package manager.  Out of the box this can be `yum` or `apt_get`, and on some installations `freebsd_ports`, `pkgsrc` and others are available as well.
+
+When `version` is left out CFEngine will only ever install or uninstall, but when `version` is set to a particular value like in the example shown, then CFEngine will upgrade **or downgrade** as needed to get that version.
+
+If you only want to upgrade to the latest version, whatever that is, set `version => "latest"`.
+
+And of course with `policy => "absent"` you can leave out `version` to ensure there isn't *any* version of the package present, or specify a version to blacklist (uninstall) just that particular version, if it's installed.  (You can't use `"absent"` with `"latest"`.)
 
 # Deleting Files
 

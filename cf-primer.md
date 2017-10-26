@@ -1,7 +1,7 @@
 % CF-Primer: Zero to Hero
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
   with Aleksey Tsalolikhin <aleksey@verticalsysadmin.com>, @atsaloli
-% 2017-10-20
+% 2017-10-26
 
 # Welcome!
 

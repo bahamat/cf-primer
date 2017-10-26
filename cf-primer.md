@@ -1,7 +1,7 @@
 % CF-Primer: Zero to Hero
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
   with Aleksey Tsalolikhin <aleksey@verticalsysadmin.com>, @atsaloli
-% 2017-10-20
+% 2017-10-26
 
 # Welcome!
 
@@ -93,7 +93,7 @@ Imperative starts at known state A and transforms to known state B.
 
 # Declarative is Descriptive
 
-Declarative moves from chaos to order. It is not a list of steps to arrive achiev an outcome but a **description** of the desired state. Because of this any deviation from the desired state can be detected and corrected.
+Declarative moves from chaos to order. It is not a list of steps to achieve an outcome but a **description** of the desired state. Because of this any deviation from the desired state can be detected and corrected.
 
 In other words, a declarative system can begin in *any* state, not simply a known state, and transform into the desired state.
 

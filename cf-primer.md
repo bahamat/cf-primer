@@ -56,9 +56,9 @@ However, you will almost always use only `cf-agent`.
 
 # cf-monitord
 
-`cf-monitord` monitors various statistics about the running system. This information is made available in the form of **classes** and **variables**..
+`cf-monitord` monitors various statistics about the running system.
 
-You'll almost never use `cf-monitord` directly. However the data provided by `cf-monitord` is available to `cf-agent`.
+You'll almost never use `cf-monitord` directly. However the data provided by `cf-monitord` is available to `cf-agent` during policy execution.
 
 # cf-execd
 

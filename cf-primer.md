@@ -35,9 +35,7 @@ You can get a copy of this presentation any time on Github.
 
 This presentation will be updated in the future, but you can find the exact version used today tagged with today's date.
 
-Aleksey has also prepared a quick reference guide.
-
-<http://www.verticalsysadmin.com/cfengine/primer.pdf>
+Aleksey has also prepared a [quick reference guide](http://www.verticalsysadmin.com/cfengine/primer.pdf).
 
 # Components of CFEngine
 

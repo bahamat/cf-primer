@@ -149,7 +149,7 @@ To learn more about Promise Theory, read the book ["Thinking in Promises"](http:
       context::
         "promiser" -> "promisee"
           attribute1 => "value",
-          attribute2 => "value";
+          attribute2 => name;
 
 Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, and the available attributes will vary depending on the *promise type*.
 

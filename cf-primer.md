@@ -78,8 +78,9 @@ What is `cf-runagent`? Look it up in the manual. You will probably never use it.
 It is very likely that you have only ever used **imperative** languages.
 
 
-**imperative language**  
-> Any programming language that specifies explicit manipulation of the state of the computer system  
+**imperative language**
+> Any programming language that specifies explicit manipulation of the state of the computer system
+
 -- [Free Online Dictionary of Computing](http://foldoc.org/imperative)
 
 

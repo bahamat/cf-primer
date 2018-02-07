@@ -178,7 +178,7 @@ Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise
 
-Example promise:
+Example:
 
     files:
       linux::

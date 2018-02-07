@@ -187,10 +187,23 @@ Example:
 
 
 * This is a promise of **type** `files`.
-* This promise has a **class context** of `linux` (it will only apply if running a Linux kernel).
+* This promise has a **context** of `linux` (it will only apply if running a Linux kernel). This is also known as a **class** (a group of hosts having something in common).
 * The **promiser** is the POSIX path `/tmp/hello/world`.
 * This promise has only one **attribute**, specifying that the file should be created if it does not exist.
 * The **promisee** is *you!*
+
+
+# Anatomy of a Promise
+
+Example:
+
+    files:
+      linux::
+        "/tmp/hello/world" -> "Student"
+          create => "true";
+
+
+
 * To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
 
 # Bundles

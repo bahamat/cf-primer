@@ -711,9 +711,12 @@ CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log mess
 
 # CFEngine output
 
-If the CFEngine agent generates any output (reports or errors) during its run, you can find it in `/var/cfengine/outputs`.
+Since CFEngine is often used at scale (tens of thousands of systems), by default it runs *silently*, otherwise it would make a lot of noise (multipled by the number of hosts).
 
-CFEngine will also send an email to the configured address in `promises.cf` any time there is output from an agent run.
+Any time there is output from an agent run (e.g., reports or errors), you can find it in in `/var/cfengine/outputs`.
+
+CFEngine will also send an email to the configured address in `promises.cf`
+
 
 # Debugging: Inform Mode
 

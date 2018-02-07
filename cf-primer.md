@@ -1,7 +1,7 @@
 % CF-Primer: Zero to Hero
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
   with Aleksey Tsalolikhin <aleksey@verticalsysadmin.com>, @atsaloli
-% 2018-02-06
+% 2018-02-07
 
 # Welcome!
 
@@ -498,12 +498,6 @@ This example is similar to the last one, except that Debian and Redhat each have
 
 # Compound Classes
 
-      commands:
-        RestartApache.debian::
-          "/usr/sbin/apache2ctl graceful";
-        RestartApache.redhat::
-          "/usr/sbin/apachectl graceful";
-
   Operator       Meaning            Example
 -------------    -----------        --------
   `.` and `&`       boolean *and*      `debian.Tuesday::`
@@ -614,7 +608,7 @@ When `version` is left out CFEngine will only ever install or uninstall, but whe
         "zsh"
           policy  => "present",
           package_module  => apt_get,
-          version => "4.3.10-4.1.el6";
+          version => "latest";
     }
 
 If you only want to upgrade to the latest version, whatever that is, set `version => "latest"`.
@@ -624,9 +618,8 @@ If you only want to upgrade to the latest version, whatever that is, set `versio
     bundle agent install {
       packages:
         "zsh"
-          policy  => "present",
-          package_module  => apt_get,
-          version => "4.3.10-4.1.el6";
+          policy  => "absent",
+          package_module  => apt_get;
     }
 
 With `policy => "absent"` you can leave out `version` to ensure there isn't *any* version of the package present, or specify a version to blacklist (uninstall) just that particular version, if it's installed.  (You can't use `"absent"` with `"latest"`.)
@@ -647,7 +640,7 @@ To delete a file indiscriminately, omit the `file_select`.
 Look up [`file_select`][file_select] and [`tidy`][tidy] in the [CFEngine Reference Manual][reference-manual] to find more ways to use this.
 
 [file_select]: https://docs.cfengine.com/lts/reference-promise-types-files.html#file_select
-[tidy]: https://docs.cfengine.com/lts/reference-standard-library-files.html#tidy
+[tidy]:  https://docs.cfengine.com/lts/reference-standard-library-files.html#tidy
 
 # Setting Up a Client/Server Environment
 

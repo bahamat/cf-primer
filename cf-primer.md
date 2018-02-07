@@ -608,7 +608,7 @@ When `version` is left out CFEngine will only ever install or uninstall, but whe
         "zsh"
           policy  => "present",
           package_module  => apt_get,
-          version => "4.3.10-4.1.el6";
+          version => "latest";
     }
 
 If you only want to upgrade to the latest version, whatever that is, set `version => "latest"`.

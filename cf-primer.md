@@ -208,7 +208,7 @@ To create a directory instead, use a `files:` promise and append a `.` to the di
 
 # Bundles
 
-A **bundle** is a collection of **promises**. It is a logical grouping of any number of promises, usually for a common purpose. E.g., a bundle to configure everything necessary for Apache to function properly.
+A **bundle** is a collection of **promises**. It is a logical grouping of any number of promises, usually for a common purpose (e.g., everything necessary for a Web site to function properly).
 
 For example, a bundle to configure Apache might:
 

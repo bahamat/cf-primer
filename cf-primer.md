@@ -300,7 +300,7 @@ Ensure `/tmp/testfile` exists, with specific permissions.
 
 The **CFEngine Standard Library** comes bundled with CFEngine in the `masterfiles/lib/` directory.
 
-The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the standard library well, it will save you much time.
+The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the [standard library](https://github.com/cfengine/masterfiles/blob/master/lib/README.md) well, it will save you much time.
 
 # Putting it All together
 

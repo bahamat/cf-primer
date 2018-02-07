@@ -722,7 +722,10 @@ CFEngine will also send an email to the configured address in `promises.cf`
 
 You can use the `-I` flag to have CFEngine *inform* you of repairs.
 
-    cf-agent -I
+    # cf-agent -f /tmp/test.cf -I
+        info: Created file '/tmp/testfile', mode 0000
+    #
+
 
 # Debugging: "Do it now!!!"
 

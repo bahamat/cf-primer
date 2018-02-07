@@ -530,7 +530,9 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 When CFEngine executes `commands` promises Apache will be started.
 
-# Ensuring Processes are Not Running: Using Processes and Commands
+# Ensuring Processes are Not Running
+
+Stopping a running process:
 
     bundle agent stop_bluetooth {
 
@@ -542,7 +544,9 @@ When CFEngine executes `commands` promises Apache will be started.
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. If it is found the `process_stop` command is executed.
 
-# Ensuring Processes are Not Running: Using Processes and Signals
+# Ensuring Processes are Not Running
+
+Killing  a running process:
 
     bundle agent stop_bluetooth {
 

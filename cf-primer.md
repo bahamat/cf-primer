@@ -227,13 +227,13 @@ For example, a bundle to configure Apache might:
         context::
           "promiser" -> "promisee"
             attribute1 => "value",
-            attribute2 => "value";
+            attribute2 => name;
 
       type:
         context::
           "promiser" -> "promisee"
             attribute1 => "value",
-            attribute2 => "value";
+            attribute2 => name;
 
     }
 
@@ -253,7 +253,7 @@ A **body** is a collection of *attributes*. These are attributes that supplement
 
     body type name {
       attribute1 => "value";
-      attribute2 => "value";
+      attribute2 => name;
     }
 
 The difference between a *bundle* and a *body* is that a bundle contains *promises* while a *body* contains only *attributes*.

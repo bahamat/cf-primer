@@ -75,7 +75,16 @@ What is `cf-runagent`? Look it up in the manual. You will probably never use it.
 
 # Imperative vs. Declarative
 
-It is very likely that you have only ever used **imperative** languages.  Examples of imperative languages include C, Perl, Ruby, Python, shell scripting, etc. Name a language. It's probably imperative.
+It is very likely that you have only ever used **imperative** languages.
+
+
+**imperative language**  
+> Any programming language that specifies explicit manipulation of the state of the computer system  
+-- [Free Online Dictionary of Computing](http://foldoc.org/imperative)
+
+
+Examples of imperative languages include C, Perl, Ruby, Python, shell scripting, etc. Name a language. It's probably imperative.
+
 
 CFEngine is a **declarative** language. The CFEngine language is merely a *description* of the final state. CFEngine uses **convergence** to arrive at the described state.
 

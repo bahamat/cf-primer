@@ -498,12 +498,6 @@ This example is similar to the last one, except that Debian and Redhat each have
 
 # Compound Classes
 
-      commands:
-        RestartApache.debian::
-          "/usr/sbin/apache2ctl graceful";
-        RestartApache.redhat::
-          "/usr/sbin/apachectl graceful";
-
   Operator       Meaning            Example
 -------------    -----------        --------
   `.` and `&`       boolean *and*      `debian.Tuesday::`

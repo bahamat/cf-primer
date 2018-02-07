@@ -214,7 +214,7 @@ For example, a bundle to configure Apache might:
 
 * install the apache2 package
 * edit the configuration file
-* copy the web server content
+* copy the Web server content
 * configure filesystem permissions
 * ensure the `httpd` process is running
 * restart the `httpd` process when necessary

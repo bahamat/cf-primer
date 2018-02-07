@@ -281,6 +281,8 @@ The parameter `param` is accessed as a variable by `$(param)`. You can name your
 
 # Bundles & Bodies
 
+Example:
+
     bundle agent main {
       files:
           "/tmp/testfile"

@@ -153,8 +153,28 @@ To learn more about Promise Theory, read the book ["Thinking in Promises"](http:
 
 Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, and the available attributes will vary depending on the *promise type*.
 
-The value can be either a text string (which must be quoted) or another object (which must not be quoted). All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
+The value can be either a text string (which must be quoted) or another object (which must not be quoted).
 
+# Anatomy of a Promise
+
+    type:
+      context::
+        "promiser" -> "promisee"
+          attribute1 => "value",
+          attribute2 => name;
+
+All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
+
+
+# Anatomy of a Promise
+
+    type:
+      context::
+        "promiser" -> "promisee"
+          attribute1 => "value",
+          attribute2 => name;
+
+All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
 Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise

@@ -640,7 +640,7 @@ To delete a file indiscriminately, omit the `file_select`.
 Look up [`file_select`][file_select] and [`tidy`][tidy] in the [CFEngine Reference Manual][reference-manual] to find more ways to use this.
 
 [file_select]: https://docs.cfengine.com/lts/reference-promise-types-files.html#file_select
-[tidy]: https://docs.cfengine.com/lts/reference-standard-library-files.html#tidy
+[tidy]:  https://docs.cfengine.com/lts/reference-standard-library-files.html#tidy
 
 # Setting Up a Client/Server Environment
 

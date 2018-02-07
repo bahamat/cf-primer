@@ -126,6 +126,10 @@ A process (e.g., `httpd`) can make a promise that it will be running. But it doe
 
 Each of the configuration file and the process are *autonomous*. Each makes promises about itself which cooperates toward an end. Promise theory is the fundamental underlying philosophy that drives CFEngine.
 
+# Promise Theory Book
+
+To learn more about Promise Theory, read the [book](http://shop.oreilly.com/product/0636920036289.do), "Thinking in Promises" by Mark Burgess.
+
 # Anatomy of a Promise
 
     type:

@@ -204,7 +204,7 @@ Example:
 
 
 
-Note: To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
+To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
 
 # Bundles
 

@@ -618,9 +618,8 @@ If you only want to upgrade to the latest version, whatever that is, set `versio
     bundle agent install {
       packages:
         "zsh"
-          policy  => "present",
-          package_module  => apt_get,
-          version => "4.3.10-4.1.el6";
+          policy  => "absent",
+          package_module  => apt_get;
     }
 
 With `policy => "absent"` you can leave out `version` to ensure there isn't *any* version of the package present, or specify a version to blacklist (uninstall) just that particular version, if it's installed.  (You can't use `"absent"` with `"latest"`.)

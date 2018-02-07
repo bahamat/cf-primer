@@ -1,7 +1,7 @@
 % CF-Primer: Zero to Hero
 % Brian Bennett <bahamat@digitalelf.net>, @bahamat
   with Aleksey Tsalolikhin <aleksey@verticalsysadmin.com>, @atsaloli
-% 2017-10-26
+% 2018-02-06
 
 # Welcome!
 
@@ -25,7 +25,7 @@ limitations under the License.
 
 CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine. In other words, you'll learn the 20% of CFEngine that will do 80% of the work.
 
-After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Take Vertical Sysadmin's four day CFEngine course, or just read the [reference manual][reference-manual].
+After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Get [on-site training](http://www.verticalsysadmin.com/cfengine/) from Vertical Sysadmin, read the [book](http://cf-learn.info/book/), work through the [tutorial](http://www.cfenginetutorial.org/), or just read the [reference manual][reference-manual].
 
 # Fork Me on Github!
 
@@ -35,9 +35,7 @@ You can get a copy of this presentation any time on Github.
 
 This presentation will be updated in the future, but you can find the exact version used today tagged with today's date.
 
-Aleksey has also prepared a quick reference guide.
-
-<http://www.verticalsysadmin.com/cfengine/primer.pdf>
+Aleksey has also prepared a [quick reference guide](http://www.verticalsysadmin.com/cfengine/primer.pdf).
 
 # Components of CFEngine
 
@@ -56,9 +54,9 @@ However, you will almost always use only `cf-agent`.
 
 # cf-monitord
 
-`cf-monitord` monitors various statistics about the running system. This information is made available in the form of **classes** and **variables**..
+`cf-monitord` monitors various statistics about the running system.
 
-You'll almost never use `cf-monitord` directly. However the data provided by `cf-monitord` is available to `cf-agent`.
+You'll almost never use `cf-monitord` directly. However the data provided by `cf-monitord` is available to `cf-agent` during policy execution.
 
 # cf-execd
 
@@ -77,15 +75,26 @@ What is `cf-runagent`? Look it up in the manual. You will probably never use it.
 
 # Imperative vs. Declarative
 
-It is very likely that you have only ever used **imperative** languages.  Examples of imperative languages include C, Perl, Ruby, Python, shell scripting, etc. Name a language. It's probably imperative.
+It is very likely that you have only ever used **imperative** languages.
 
-CFEngine is a **declarative** language. The CFEngine language is merely a *description* of the final state. CFEngine uses **convergence** to arrive at the described state.
+
+**imperative language:**
+
+> Any programming language that specifies explicit manipulation of the state of the computer system
+
+-- [Free Online Dictionary of Computing](http://foldoc.org/imperative)
+
+
+Examples of imperative languages include C, Perl, Ruby, Python, shell scripting, etc. Name a language. It's probably imperative.
+
+
+CFEngine is a **declarative** language. The CFEngine language is merely a *description* of the final state. CFEngine moves the system to the desired state and keeps it there.
 
 # Imperative is Sequential
 
 Imperative languages execute step by step in *sequence*.
 
-Because it is sequential must go in order from start to finish. If a sequential program is interrupted in the middle the state is *inconsistent*. Neither at starting point nor at the finish. Executing the program again will repeat tasks that have already been done, possibly causing damage in doing so.
+Because it is sequential, it must go in order from start to finish. If a sequential program is interrupted in the middle the state is *inconsistent*. Neither at starting point nor at the finish. Executing the program again will repeat tasks that have already been done, possibly causing damage in doing so.
 
 E.g., a script that appends a line to a file then restarts a daemon. If the line is appended but the daemon not restarted, running the script again will result in that line in the file twice. This will likely cause the daemon to fail when restarted.
 
@@ -99,7 +108,13 @@ In other words, a declarative system can begin in *any* state, not simply a know
 
 Declarative states a list of things which must be true. It does not state how to make them true.
 
-When a system has reached the desired state it is said to have reached **convergence**.
+When a system has reached the desired state it is said to have **converged**, or reached **convergence**.
+
+**Converge:**
+
+> (of a number of things) gradually change so as to become similar or develop something in common.
+
+-- [Oxford Dictionary](https://en.oxforddictionaries.com/definition/converge)
 
 # Promise Theory
 
@@ -111,6 +126,10 @@ A process (e.g., `httpd`) can make a promise that it will be running. But it doe
 
 Each of the configuration file and the process are *autonomous*. Each makes promises about itself which cooperates toward an end. Promise theory is the fundamental underlying philosophy that drives CFEngine.
 
+# Promise Theory Book
+
+To learn more about Promise Theory, read the book ["Thinking in Promises"](http://shop.oreilly.com/product/0636920036289.do), by Mark Burgess.
+
 # Anatomy of a Promise
 
     type:
@@ -120,9 +139,9 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
           attribute2 => "value";
 
 * **type** is the kind of promise being made (e.g., files, commands, etc.).
-* **context** is an optional. Promises with a context will only apply if the given context is true.
+* **context** is an optional. Promises with a context will only apply if the given context is true (e.g., CentOS 6 servers, Web servers, servers in Seattle).
 * **promiser** is what is making the promise. (e.g., a file or a process).
-* **promisee** is an optional recipient or beneficiary of the promise.
+* **promisee** is an optional recipient or beneficiary of the promise (e.g., another system or organizational stakeholder).
 
 # Anatomy of a Promise
 
@@ -130,39 +149,72 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
       context::
         "promiser" -> "promisee"
           attribute1 => "value",
-          attribute2 => "value";
+          attribute2 => name;
 
 Each promise has a list of attributes that describe the parameters of the promise.  Every attribute is optional, and the available attributes will vary depending on the *promise type*.
 
-The value can be either a text string (which must be quoted) or another object (which must not be quoted). All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
+The value can be either a text string (which must be quoted) or another object (which must not be quoted).
+
+# Anatomy of a Promise
+
+    type:
+      context::
+        "promiser" -> "promisee"
+          attribute1 => "value",
+          attribute2 => name;
+
+All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
+
+
+# Anatomy of a Promise
+
+    type:
+      context::
+        "promiser" -> "promisee"
+          attribute1 => "value",
+          attribute2 => name;
 
 Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise
+
+Example:
 
     files:
       linux::
         "/tmp/hello/world" -> "Student"
           create => "true";
 
-This is an example promise.
 
 * This is a promise of **type** `files`.
-* This promise has a **class context** of `linux` (it will only apply if running a Linux kernel).
+* This promise has a **context** of `linux` (it will only apply if running a Linux kernel). This is also known as a **class** (a group of hosts having something in common).
 * The **promiser** is the POSIX path `/tmp/hello/world`.
 * This promise has only one **attribute**, specifying that the file should be created if it does not exist.
 * The **promisee** is *you!*
-* To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
+
+
+# Anatomy of a Promise
+
+Example:
+
+    files:
+      linux::
+        "/tmp/hello/world" -> "Student"
+          create => "true";
+
+
+
+To create a directory instead, use a `files:` promise and append a `.` to the directory name (e.g., `"/tmp/hello/."`)
 
 # Bundles
 
-A **bundle** is a collection of **promises**. It is a logical grouping of any number of promises, usually for a common purpose. E.g., a bundle to configure everything necessary for Apache to function properly.
+A **bundle** is a collection of **promises**. It is a logical grouping of any number of promises, usually for a common purpose (e.g., everything necessary for a Web site to function properly).
 
 For example, a bundle to configure Apache might:
 
 * install the apache2 package
 * edit the configuration file
-* copy the web server content
+* copy the Web server content
 * configure filesystem permissions
 * ensure the `httpd` process is running
 * restart the `httpd` process when necessary
@@ -175,13 +227,13 @@ For example, a bundle to configure Apache might:
         context::
           "promiser" -> "promisee"
             attribute1 => "value",
-            attribute2 => "value";
+            attribute2 => name;
 
       type:
         context::
           "promiser" -> "promisee"
             attribute1 => "value",
-            attribute2 => "value";
+            attribute2 => name;
 
     }
 
@@ -201,7 +253,7 @@ A **body** is a collection of *attributes*. These are attributes that supplement
 
     body type name {
       attribute1 => "value";
-      attribute2 => "value";
+      attribute2 => name;
     }
 
 The difference between a *bundle* and a *body* is that a bundle contains *promises* while a *body* contains only *attributes*.
@@ -227,11 +279,28 @@ Here's an example:
 
 The parameter `param` is accessed as a variable by `$(param)`. You can name your parameters anything you like.
 
+# Bundles & Bodies
+
+Example:
+
+    bundle agent main {
+      files:
+          "/tmp/testfile"
+            create => "true",
+            perms => not_world_writable;
+    }
+
+    body perms not_world_writable {
+            mode   => "o-w";
+    }
+
+Ensure `/tmp/testfile` exists, with specific permissions.
+
 # The CFEngine Standard Library
 
 The **CFEngine Standard Library** comes bundled with CFEngine in the `masterfiles/lib/` directory.
 
-The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the standard library well, it will save you much time.
+The standard library contains ready to use bundles and bodies that you can include in your promises and is growing with every version of CFEngine. Get to know the [standard library](https://github.com/cfengine/masterfiles/blob/master/lib/README.md) well, it will save you much time.
 
 # Putting it All together
 
@@ -461,7 +530,9 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 When CFEngine executes `commands` promises Apache will be started.
 
-# Ensuring Processes are Not Running: Using Processes and Commands
+# Ensuring Processes are Not Running
+
+Stopping a running process:
 
     bundle agent stop_bluetooth {
 
@@ -473,7 +544,9 @@ When CFEngine executes `commands` promises Apache will be started.
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. If it is found the `process_stop` command is executed.
 
-# Ensuring Processes are Not Running: Using Processes and Signals
+# Ensuring Processes are Not Running
+
+Killing  a running process:
 
     bundle agent stop_bluetooth {
 
@@ -485,7 +558,7 @@ This policy uses a `processes` promise to check the process table (with `ps`) fo
 
 This policy uses a `processes` promise to check the process table (with `ps`) for the regular expression `.*bluetoothd.*`. Any matching process is sent the `term` signal, then sent the `kill` signal.
 
-**Note:** The promise `"bluetoothd"` becomes the *regular expression*, `.*bluetoothd.*` that is matched against the output of `ps`. This means that it can match *anywhere* on the line, not just the process name field. *Caveat emptor!*
+**Note:** The promise `"bluetoothd"` becomes the *regular expression*, `.*bluetoothd.*` that is matched against the command line field of `ps`.
 
 # Keep Services Running: Using Services
 
@@ -533,9 +606,30 @@ The next attribute, `package_module`, specifies how CFEngine should interface wi
 
 When `version` is left out CFEngine will only ever install or uninstall, but when `version` is set to a particular value like in the example shown, then CFEngine will upgrade **or downgrade** as needed to get that version.
 
+
+# Package Management
+
+    bundle agent install {
+      packages:
+        "zsh"
+          policy  => "present",
+          package_module  => apt_get,
+          version => "4.3.10-4.1.el6";
+    }
+
 If you only want to upgrade to the latest version, whatever that is, set `version => "latest"`.
 
-And of course with `policy => "absent"` you can leave out `version` to ensure there isn't *any* version of the package present, or specify a version to blacklist (uninstall) just that particular version, if it's installed.  (You can't use `"absent"` with `"latest"`.)
+# Package Management
+
+    bundle agent install {
+      packages:
+        "zsh"
+          policy  => "present",
+          package_module  => apt_get,
+          version => "4.3.10-4.1.el6";
+    }
+
+With `policy => "absent"` you can leave out `version` to ensure there isn't *any* version of the package present, or specify a version to blacklist (uninstall) just that particular version, if it's installed.  (You can't use `"absent"` with `"latest"`.)
 
 # Deleting Files
 
@@ -557,7 +651,7 @@ Look up [`file_select`][file_select] and [`tidy`][tidy] in the [CFEngine Referen
 
 # Setting Up a Client/Server Environment
 
-Before starting you need to have cfengine installed on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
+Before starting you need to have CFEngine installed on the server and the client, and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
 
 Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list.
 
@@ -615,15 +709,41 @@ CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log mess
 
 **Note:** The timestamp is a Unix epoch.
 
-CFEngine will also send an email to the configured address in `promises.cf` any time there is output from an agent run.
+# CFEngine output
 
-And finally you can use the `-I` flag to have CFEngine *inform* you of repairs. (Shown here along with the `-K` flag which ignores any lock timers).
+Since CFEngine is often used at scale (tens of thousands of systems), it runs *silently*, otherwise it would make a lot of noise (imagine each log message multipled by the number of hosts).
+
+Any time there is output from an agent run (e.g., reports or errors), you can find it in in `/var/cfengine/outputs`.
+
+CFEngine will also send an email to the configured address in `promises.cf`
+
+
+# Debugging: Inform Mode
+
+You can use the `-I` flag to have CFEngine *inform* you of repairs.
+
+    # cf-agent -f /tmp/test.cf -I
+        info: Created file '/tmp/testfile', mode 0000
+    #
+
+
+# Debugging: "Do it now!!!"
+
+This gives me a chance to say "Do it now!!!" in my Arnold Schwarzenegger voice.
+
+The `-K` flag overrides any "cooling off" timers. To keep a light footprint on your infrastructure, CFEngine keeps track of when it recently checked a promise and won't check it again until some time elapses (1 minute when running from the command line). Override this with:
 
     cf-agent -KI
 
-# Debugging: Using Verbose Mode
+# Debugging: Colorize
 
-Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful
+Add the `-C` flag to colorize the output -- green is good, red is bad, right?
+
+    cf-agent -KIC
+
+# Debugging: Verbose Mode
+
+Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful:
 
     $ cf-agent -Kv
 

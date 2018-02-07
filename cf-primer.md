@@ -106,7 +106,12 @@ In other words, a declarative system can begin in *any* state, not simply a know
 
 Declarative states a list of things which must be true. It does not state how to make them true.
 
-When a system has reached the desired state it is said to have reached **convergence**.
+When a system has reached the desired state it is said to have **converged**, or reached **convergence**.
+
+**Converge* means:
+- (of a number of things) gradually change so as to become similar or develop something in common.
+
+-- [Oxford Dictionary](https://en.oxforddictionaries.com/definition/converge)
 
 # Promise Theory
 

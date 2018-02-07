@@ -279,6 +279,21 @@ Here's an example:
 
 The parameter `param` is accessed as a variable by `$(param)`. You can name your parameters anything you like.
 
+# Bundles & Bodies
+
+    bundle agent main {
+      files:
+          "/tmp/testfile"
+            create => "true",
+            perms => not_world_writable;
+    }
+
+    body perms not_world_writable {
+            mode   => "o-w";
+    }
+
+Ensure `/tmp/testfile` exists, with specific permissions.
+
 # The CFEngine Standard Library
 
 The **CFEngine Standard Library** comes bundled with CFEngine in the `masterfiles/lib/` directory.

@@ -174,7 +174,6 @@ All of the attributes together are called the **body** of the promise (as in "th
           attribute1 => "value",
           attribute2 => name;
 
-All of the attributes together are called the **body** of the promise (as in "the body of an e-mail").
 Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise

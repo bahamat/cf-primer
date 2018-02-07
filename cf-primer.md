@@ -88,7 +88,7 @@ It is very likely that you have only ever used **imperative** languages.
 Examples of imperative languages include C, Perl, Ruby, Python, shell scripting, etc. Name a language. It's probably imperative.
 
 
-CFEngine is a **declarative** language. The CFEngine language is merely a *description* of the final state. CFEngine uses **convergence** to arrive at the described state.
+CFEngine is a **declarative** language. The CFEngine language is merely a *description* of the final state. CFEngine moves the system to the desired state and keeps it there.
 
 # Imperative is Sequential
 

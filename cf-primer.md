@@ -139,7 +139,7 @@ To learn more about Promise Theory, read the book ["Thinking in Promises"](http:
           attribute2 => "value";
 
 * **type** is the kind of promise being made (e.g., files, commands, etc.).
-* **context** is an optional. Promises with a context will only apply if the given context is true (e.g., CentOS 6 servers, Web servers, servers in Seattle data center).
+* **context** is an optional. Promises with a context will only apply if the given context is true (e.g., CentOS 6 servers, Web servers, servers in Seattle).
 * **promiser** is what is making the promise. (e.g., a file or a process).
 * **promisee** is an optional recipient or beneficiary of the promise (e.g., another system or organizational stakeholder)
 

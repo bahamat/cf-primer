@@ -25,7 +25,7 @@ limitations under the License.
 
 CFEngine is very extensive and powerful. Today you will learn only a subset of what CFEngine can do. A mere tip of the iceberg, but this will represent the bulk of what you do with CFEngine. In other words, you'll learn the 20% of CFEngine that will do 80% of the work.
 
-After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Get [on-site training](http://www.verticalsysadmin.com/cfengine/) from Vertical Sysadmin. You can also read [the book](http://cf-learn.info/book/) and work through [the tutorial](http://www.cfenginetutorial.org/), or just read the [reference manual][reference-manual].
+After today you won't be a *ninja*. But you will be a *hero*. Want to know more? Get [on-site training](http://www.verticalsysadmin.com/cfengine/) from Vertical Sysadmin. You can also read the [book](http://cf-learn.info/book/) and work through the [tutorial](http://www.cfenginetutorial.org/), or just read the [reference manual][reference-manual].
 
 # Fork Me on Github!
 

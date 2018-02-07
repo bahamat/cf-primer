@@ -711,7 +711,7 @@ CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log mess
 
 # CFEngine output
 
-Since CFEngine is often used at scale (tens of thousands of systems), by default it runs *silently*, otherwise it would make a lot of noise (multipled by the number of hosts).
+Since CFEngine is often used at scale (tens of thousands of systems), it runs *silently*, otherwise it would make a lot of noise (imagine each log message multipled by the number of hosts).
 
 Any time there is output from an agent run (e.g., reports or errors), you can find it in in `/var/cfengine/outputs`.
 

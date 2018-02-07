@@ -179,12 +179,13 @@ Attributes are separated by *commas*. Each promise ends with a *semi-colon*.
 
 # Anatomy of a Promise
 
+Example promise:
+
     files:
       linux::
         "/tmp/hello/world" -> "Student"
           create => "true";
 
-This is an example promise.
 
 * This is a promise of **type** `files`.
 * This promise has a **class context** of `linux` (it will only apply if running a Linux kernel).

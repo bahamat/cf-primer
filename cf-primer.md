@@ -651,7 +651,7 @@ Look up [`file_select`][file_select] and [`tidy`][tidy] in the [CFEngine Referen
 
 # Setting Up a Client/Server Environment
 
-Before starting you need to have cfengine installed on the server and the client and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
+Before starting you need to have CFEngine installed on the server and the client, and the server FQDN must be set properly in DNS (or use the IP addresses). This is ideally handled by your provisioning process. Along with automating server function you should also be automating your provisioning process.
 
 Some ways of automating provisioning are [**kickstart**][ks], [**preseed**][ps], [**fai**][fai], [**cobbler**][cbl], [**disk imaging**][g4u], [**instance cloning**][ec2], etc, etc. This of course is not a complete list.
 

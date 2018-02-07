@@ -735,6 +735,12 @@ The `-K` flag overrides any "cooling off" timers. To keep a light footprint on y
 
     cf-agent -KI
 
+# Debugging: Colorize
+
+Add the `-C` flag to colorize the output -- green is good, red is bad, right?
+
+    cf-agent -KIC
+
 # Debugging: Verbose Mode
 
 Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful:

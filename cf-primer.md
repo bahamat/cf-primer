@@ -709,15 +709,29 @@ CFEngine logs to `/var/cfengine/promise_summary.log`. Here's an example log mess
 
 **Note:** The timestamp is a Unix epoch.
 
+# CFEngine output
+
+If the CFEngine agent generates any output (reports or errors) during its run, you can find it in `/var/cfengine/outputs`.
+
 CFEngine will also send an email to the configured address in `promises.cf` any time there is output from an agent run.
 
-And finally you can use the `-I` flag to have CFEngine *inform* you of repairs. (Shown here along with the `-K` flag which ignores any lock timers).
+# Debugging: Inform Mode
+
+You can use the `-I` flag to have CFEngine *inform* you of repairs.
+
+    cf-agent -I
+
+# Debugging: "Do it now!!!"
+
+This gives me a chance to say "Do it now!!!" in my Arnold Schwarzenegger voice.
+
+The `-K` flag overrides any "cooling off" timers. To keep a light footprint on your infrastructure, CFEngine keeps track of when it recently checked a promise and won't check it again until some time elapses (1 minute when running from the command line). Override this with:
 
     cf-agent -KI
 
-# Debugging: Using Verbose Mode
+# Debugging: Verbose Mode
 
-Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful
+Inevitably, something will go wrong. Lucky for you, CFEngine has fantastic debugging output. Use the `-v` flag to turn on verbose output. Again, using `-K` to disable locks is useful:
 
     $ cf-agent -Kv
 

@@ -128,7 +128,7 @@ Each of the configuration file and the process are *autonomous*. Each makes prom
 
 # Promise Theory Book
 
-To learn more about Promise Theory, read the [book](http://shop.oreilly.com/product/0636920036289.do), "Thinking in Promises" by Mark Burgess.
+To learn more about Promise Theory, read the book ["Thinking in Promises"](http://shop.oreilly.com/product/0636920036289.do), by Mark Burgess.
 
 # Anatomy of a Promise
 
